@@ -2,13 +2,13 @@ import fs from 'node:fs/promises';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { setupTestTempDir } from '../test-utils/temp-dir.js';
 import {
-  type TokenData,
   clearInventoryTokens,
   getValidInventoryAccessToken,
   isInventoryTokenValid,
   loadInventoryTokens,
   refreshInventoryAccessToken,
   saveInventoryTokens,
+  type TokenData,
 } from './tokens.js';
 
 const { setup: setupTempDir, cleanup: cleanupTempDir } = setupTestTempDir('inventory-tokens-test-');
@@ -21,8 +21,7 @@ vi.mock('./config.js', () => ({
     clientId: string;
     clientSecret: string;
     callbackPort: number;
-  }> =>
-    Promise.resolve({ clientId: 'cid', clientSecret: 'csec', callbackPort: 54323 }),
+  }> => Promise.resolve({ clientId: 'cid', clientSecret: 'csec', callbackPort: 54323 }),
 }));
 
 const mockFs = vi.mocked(fs);

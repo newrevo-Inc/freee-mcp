@@ -2,15 +2,15 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {
   OAuthTokenResponseSchema,
+  refreshFreeeTokenRaw,
   type TokenData,
   TokenDataSchema,
-  refreshFreeeTokenRaw,
 } from '../auth/tokens.js';
 import { CONFIG_FILE_PERMISSION, getConfigDir } from '../constants.js';
 import {
+  getInventoryCredentials,
   INVENTORY_OAUTH_SCOPE,
   INVENTORY_TOKEN_ENDPOINT,
-  getInventoryCredentials,
 } from './config.js';
 
 export { OAuthTokenResponseSchema, type TokenData };

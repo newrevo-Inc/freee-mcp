@@ -3,9 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { setupTestTempDir } from '../test-utils/temp-dir.js';
 import {
   getInventoryCredentials,
+  type InventoryConfig,
   loadInventoryConfig,
   resetInventoryConfigCache,
-  type InventoryConfig,
 } from './config.js';
 
 const { setup: setupTempDir, cleanup: cleanupTempDir } = setupTestTempDir('inventory-config-test-');
