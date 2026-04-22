@@ -1,0 +1,420 @@
+{
+  "paths": {
+    "/api/v1/warehouses": {
+      "get": {
+        "summary": "拠点一覧",
+        "description": "拠点一覧"
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "summary": "商品マスター一覧"
+      },
+      "post": {
+        "summary": "商品マスター作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/products/{id}": {
+      "get": {
+        "summary": "商品マスター詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "商品マスターID"
+          }
+        ]
+      },
+      "put": {
+        "summary": "商品マスター更新",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "商品マスターID"
+          }
+        ],
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/product_variants": {
+      "get": {
+        "summary": "種類一覧"
+      },
+      "post": {
+        "summary": "種類作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/product_variants/{id}": {
+      "get": {
+        "summary": "種類詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "種類ID"
+          }
+        ]
+      },
+      "put": {
+        "summary": "種類更新",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/receiving_schedules": {
+      "get": {
+        "summary": "入荷予定一覧",
+        "description": "入荷予定一覧"
+      },
+      "post": {
+        "summary": "入荷予定作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/receiving_schedules/{id}": {
+      "get": {
+        "summary": "入荷予定詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "入荷予定ID"
+          }
+        ]
+      },
+      "put": {
+        "summary": "入荷予定更新",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "入荷予定ID"
+          }
+        ],
+        "hasJsonBody": true
+      },
+      "delete": {
+        "summary": "入荷予定削除",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "入荷予定ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/receiving_schedules/{id}/receive": {
+      "put": {
+        "summary": "入荷確定",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "入荷予定ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/receiving_histories/{id}": {
+      "get": {
+        "summary": "入荷履歴詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "入荷履歴ID"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "入荷履歴削除",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "入荷履歴ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/receiving_histories": {
+      "get": {
+        "summary": "入荷履歴一覧",
+        "description": "入荷履歴一覧",
+        "parameters": [
+          {
+            "name": "received_date_from",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "指定した入荷日以降の履歴が返されます"
+          },
+          {
+            "name": "received_date_to",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "指定した入荷日以前の履歴が返されます"
+          }
+        ]
+      },
+      "post": {
+        "summary": "入荷履歴作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/shipping_schedules": {
+      "get": {
+        "summary": "出荷予定一覧",
+        "description": "出荷予定一覧"
+      },
+      "post": {
+        "summary": "出荷予定作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/shipping_schedules/{id}/start": {
+      "patch": {
+        "summary": "出荷作業開始",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/shipping_schedules/{id}/ship": {
+      "put": {
+        "summary": "出荷確定",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "出荷予定ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/shipping_schedules/{id}": {
+      "get": {
+        "summary": "出荷予定詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "出荷予定ID"
+          }
+        ]
+      },
+      "put": {
+        "summary": "出荷予定更新",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "出荷予定ID"
+          }
+        ],
+        "hasJsonBody": true
+      },
+      "delete": {
+        "summary": "出荷予定削除",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "出荷予定ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/shipping_histories/{id}": {
+      "get": {
+        "summary": "出荷履歴詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "出荷履歴ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/shipping_histories": {
+      "get": {
+        "summary": "出荷履歴一覧",
+        "description": "出荷履歴一覧",
+        "parameters": [
+          {
+            "name": "shipped_date_from",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "指定した出荷実績日以降の履歴が返されます"
+          },
+          {
+            "name": "shipped_date_to",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "指定した出荷実績以前の履歴が返されます"
+          }
+        ]
+      },
+      "post": {
+        "summary": "出荷履歴作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/stocks/{id}": {
+      "get": {
+        "summary": "在庫詳細取得",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "在庫ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/inventories": {
+      "get": {
+        "summary": "在庫一覧",
+        "description": "在庫一覧"
+      },
+      "post": {
+        "summary": "在庫作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/consignees": {
+      "get": {
+        "summary": "出荷先一覧",
+        "description": "出荷先一覧"
+      },
+      "post": {
+        "summary": "出荷先作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/consignees/{id}": {
+      "put": {
+        "summary": "出荷先更新",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "出荷先ID"
+          }
+        ],
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/suppliers": {
+      "get": {
+        "summary": "仕入先一覧",
+        "description": "仕入先一覧"
+      },
+      "post": {
+        "summary": "仕入先作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/suppliers/{id}": {
+      "put": {
+        "summary": "仕入先更新",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "仕入先ID"
+          }
+        ],
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/shops": {
+      "get": {
+        "summary": "ショップ一覧",
+        "description": "入荷履歴一覧"
+      },
+      "post": {
+        "summary": "ショップ作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/external_service_accounts": {
+      "get": {
+        "summary": "外部連携アカウント一覧",
+        "description": "外部連携アカウント一覧"
+      }
+    },
+    "/api/v1/external_service_product_variants": {
+      "post": {
+        "summary": "商品の外部サービス連携紐付け作成",
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/external_service_product_variants/{id}": {
+      "put": {
+        "summary": "商品の外部サービス連携紐付け更新",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "外部連携紐付けID"
+          }
+        ],
+        "hasJsonBody": true
+      },
+      "delete": {
+        "summary": "商品の外部サービス連携紐付け削除",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "外部連携紐付けID"
+          }
+        ]
+      }
+    }
+  }
+}

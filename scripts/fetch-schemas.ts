@@ -178,6 +178,12 @@ const SCHEMA_SOURCES = [
     outputFile: "sign-api-schema.json",
     minimalFile: "sign.json",
   },
+  {
+    name: "inventory-api",
+    url: "https://logikura.dev/api/logikura.v1.yaml",
+    outputFile: "inventory-api-schema.json",
+    minimalFile: "inventory.json",
+  },
 ];
 
 /**

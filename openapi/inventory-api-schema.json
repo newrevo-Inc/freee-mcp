@@ -1,0 +1,4873 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ロジクラ API",
+    "version": "1.0",
+    "description": "ロジクラで管理しているデータを外部から利用するためのAPIです。\n# 概要\n\n## リクエスト制限\nロジクラAPIでは1分あたり100回のリクエスト制限を設けています。\nリクエスト制限に関する情報はヘッダに含まれています。\n\n|ヘッダ名|説明|\n|---|---|\n|X-RateLimit-Limit|1分あたりのリクエスト数|\n|X-RateLimit-Remaining|リクエスト可能数|\n|X-Rate-Limit-Reset|リクエスト数がリセットされるまでの秒数|\n\n## エラーレスポンス\n|HTTPステータスコード|種類|原因|\n|---|---|---|\n|401|Unauthorized|アクセストークンが不正|\n|404|Not Found|リソースが存在しません|\n|422|Unprocessable Entity|不正なパラメーター|\n|499|Too Many Requests|リクエスト制限の上限を超えました|\n\n## ページネーション\nリストを返すAPIに関しては応答にLinkヘッダーを追加します。\n```\n<https://api.logikura.com/api/v1/path/to?page=1>; rel=\"prev\",\n<https://api.logikura.com/api/v1/path/to?page=3>; rel=\"next\"\n```\n",
+    "contact": {}
+  },
+  "servers": [
+    {
+      "url": "https://api.logikura.com"
+    }
+  ],
+  "paths": {
+    "/api/v1/warehouses": {
+      "get": {
+        "summary": "拠点一覧",
+        "tags": [
+          "拠点"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Warehouses"
+                }
+              }
+            }
+          }
+        },
+        "description": "拠点一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "Warehouses#get"
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "tags": [
+          "商品マスター"
+        ],
+        "summary": "商品マスター一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "商品マスター一覧",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Products"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "商品マスター"
+        ],
+        "summary": "商品マスター作成",
+        "operationId": "Products#post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewProduct"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "商品マスター",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/{id}": {
+      "get": {
+        "tags": [
+          "商品マスター"
+        ],
+        "summary": "商品マスター詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "商品マスターID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "商品マスター詳細",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "商品マスター"
+        ],
+        "summary": "商品マスター更新",
+        "operationId": "Products#put",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "商品マスターID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/NewProduct"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "商品マスター",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product_variants": {
+      "get": {
+        "tags": [
+          "種類"
+        ],
+        "summary": "種類一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "種類一覧",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductVariants"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "種類"
+        ],
+        "summary": "種類作成",
+        "operationId": "ProductVariants#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewProductVariant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "種類",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product_varian": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ProductVariant"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product_variants/{id}": {
+      "get": {
+        "tags": [
+          "種類"
+        ],
+        "summary": "種類詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "種類ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "種類詳細",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductVariant"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "種類"
+        ],
+        "summary": "種類更新",
+        "operationId": "ProductVariants#put",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EditProductVariant"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "種類",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product_variant": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ProductVariant"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/receiving_schedules": {
+      "get": {
+        "summary": "入荷予定一覧",
+        "tags": [
+          "入荷"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/ReceivingSchedules"
+                }
+              }
+            }
+          }
+        },
+        "description": "入荷予定一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "ReceivingSchdules#get"
+      },
+      "post": {
+        "summary": "入荷予定作成",
+        "tags": [
+          "入荷"
+        ],
+        "operationId": "ReceivingSchdules#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewReceivingSchedule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "receiving_schedule"
+                  ],
+                  "properties": {
+                    "receiving_schedule": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ReceivingSchedule"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/receiving_schedules/{id}": {
+      "get": {
+        "summary": "入荷予定詳細",
+        "tags": [
+          "入荷"
+        ],
+        "operationId": "ReceivingSchedules#show",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "入荷予定ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "receiving_schedule"
+                  ],
+                  "properties": {
+                    "receiving_schedule": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ReceivingSchedule"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "入荷予定更新",
+        "tags": [
+          "入荷"
+        ],
+        "operationId": "ReceivingSchdules#put",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "入荷予定ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditReceivingSchedule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "receiving_schedule"
+                  ],
+                  "properties": {
+                    "receiving_schedule": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ReceivingSchedule"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error422"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "入荷予定削除",
+        "tags": [
+          "入荷"
+        ],
+        "operationId": "ReceivingSchdules#delete",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "入荷予定ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "success"
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/receiving_schedules/{id}/receive": {
+      "put": {
+        "summary": "入荷確定",
+        "tags": [
+          "入荷"
+        ],
+        "operationId": "ReceivingSchedules#receive",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "入荷予定ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "receiving_schedule": {
+                      "$ref": "#/components/schemas/ReceivingSchedule"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/receiving_histories/{id}": {
+      "get": {
+        "summary": "入荷履歴詳細",
+        "tags": [
+          "入荷"
+        ],
+        "operationId": "ReceivingHistories#show",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "入荷履歴ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "receiving_history"
+                  ],
+                  "properties": {
+                    "receiving_history": {
+                      "$ref": "#/components/schemas/ReceivingHistory"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "入荷履歴削除",
+        "tags": [
+          "入荷"
+        ],
+        "operationId": "ReceivingHistories#delete",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "入荷履歴ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "success"
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/receiving_histories": {
+      "get": {
+        "summary": "入荷履歴一覧",
+        "tags": [
+          "入荷"
+        ],
+        "parameters": [
+          {
+            "name": "received_date_from",
+            "in": "query",
+            "required": false,
+            "description": "指定した入荷日以降の履歴が返されます",
+            "example": "2020-01-01",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "received_date_to",
+            "in": "query",
+            "required": false,
+            "description": "指定した入荷日以前の履歴が返されます",
+            "example": "2020-01-31",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceivingHistories"
+                }
+              }
+            }
+          }
+        },
+        "description": "入荷履歴一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "ReceivingHistories#get"
+      },
+      "post": {
+        "summary": "入荷履歴作成",
+        "tags": [
+          "入荷"
+        ],
+        "operationId": "ReceivingHistories#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewReceivingHistory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "receiving_history"
+                  ],
+                  "properties": {
+                    "receiving_history": {
+                      "$ref": "#/components/schemas/ReceivingHistory"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shipping_schedules": {
+      "get": {
+        "summary": "出荷予定一覧",
+        "tags": [
+          "出荷"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShippingSchedules"
+                }
+              }
+            }
+          }
+        },
+        "description": "出荷予定一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "ShippingSchdules#get"
+      },
+      "post": {
+        "summary": "出荷予定作成",
+        "tags": [
+          "出荷"
+        ],
+        "operationId": "ShippingSchedule#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewShippingSchedule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shipping_schedule": {
+                      "$ref": "#/components/schemas/ShippingSchedule"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shipping_schedules/{id}/start": {
+      "patch": {
+        "summary": "出荷作業開始",
+        "tags": [
+          "出荷"
+        ],
+        "operationId": "ShippingInstruction#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "warehouse_id"
+                ],
+                "properties": {
+                  "warehouse_id": {
+                    "type": "integer",
+                    "example": 1,
+                    "minimum": 1,
+                    "description": "拠点ID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shipping_schedule": {
+                      "$ref": "#/components/schemas/ShippingSchedule"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "shipping_item_ids",
+                    "errors"
+                  ],
+                  "properties": {
+                    "shipping_item_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "description": "出荷商品ID"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shipping_schedules/{id}/ship": {
+      "put": {
+        "summary": "出荷確定",
+        "tags": [
+          "出荷"
+        ],
+        "operationId": "ShippingSchedules#ship",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "出荷予定ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shipping_schedule": {
+                      "$ref": "#/components/schemas/ShippingSchedule"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shipping_schedules/{id}": {
+      "get": {
+        "tags": [
+          "出荷"
+        ],
+        "summary": "出荷予定詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "出荷予定ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "shipping_schedule"
+                  ],
+                  "properties": {
+                    "shipping_schedule": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ShippingSchedule"
+                        }
+                      ],
+                      "description": "出荷予定"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error422"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "出荷予定更新",
+        "tags": [
+          "出荷"
+        ],
+        "operationId": "ShippingSchdules#put",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "出荷予定ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditShippingSchedule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "shipping_schedule"
+                  ],
+                  "properties": {
+                    "shipping_schedule": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ShippingSchedule"
+                        }
+                      ],
+                      "description": "出荷予定"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error422"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "出荷予定削除",
+        "tags": [
+          "出荷"
+        ],
+        "operationId": "ShippingSchdules#delete",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "出荷予定ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "success"
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shipping_histories/{id}": {
+      "get": {
+        "tags": [
+          "出荷"
+        ],
+        "summary": "出荷履歴詳細",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "出荷履歴ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "shipping_history"
+                  ],
+                  "properties": {
+                    "shipping_history": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ShippingHistory"
+                        }
+                      ],
+                      "description": "出荷履歴"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shipping_histories": {
+      "get": {
+        "summary": "出荷履歴一覧",
+        "tags": [
+          "出荷"
+        ],
+        "parameters": [
+          {
+            "name": "shipped_date_from",
+            "in": "query",
+            "required": false,
+            "description": "指定した出荷実績日以降の履歴が返されます",
+            "example": "2020-01-01",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "shipped_date_to",
+            "in": "query",
+            "required": false,
+            "description": "指定した出荷実績以前の履歴が返されます",
+            "example": "2020-01-31",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShippingHistories"
+                }
+              }
+            }
+          }
+        },
+        "description": "出荷履歴一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "ShippingHistories#get"
+      },
+      "post": {
+        "summary": "出荷履歴作成",
+        "tags": [
+          "出荷"
+        ],
+        "operationId": "ShippingHistory#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewShippingHistory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "shipping_history"
+                  ],
+                  "properties": {
+                    "shipping_history": {
+                      "$ref": "#/components/schemas/ShippingHistory"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stocks/{id}": {
+      "get": {
+        "summary": "在庫詳細取得",
+        "tags": [
+          "在庫"
+        ],
+        "operationId": "Stocks#show",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "在庫ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "stock"
+                  ],
+                  "properties": {
+                    "stock": {
+                      "$ref": "#/components/schemas/Stock"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventories": {
+      "get": {
+        "summary": "在庫一覧",
+        "tags": [
+          "在庫"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inventories"
+                }
+              }
+            }
+          }
+        },
+        "description": "在庫一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "Inventories#get"
+      },
+      "post": {
+        "summary": "在庫作成",
+        "tags": [
+          "在庫"
+        ],
+        "operationId": "Inventories#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewInventory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "在庫",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "inventory": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Inventory"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/consignees": {
+      "get": {
+        "summary": "出荷先一覧",
+        "tags": [
+          "出荷先"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Consignees"
+                }
+              }
+            }
+          }
+        },
+        "description": "出荷先一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "Consignees#get"
+      },
+      "post": {
+        "summary": "出荷先作成",
+        "tags": [
+          "出荷先"
+        ],
+        "operationId": "Consignees#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewConsignee"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "出荷先",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "consignee"
+                  ],
+                  "properties": {
+                    "consignee": {
+                      "$ref": "#/components/schemas/Consignee"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/consignees/{id}": {
+      "put": {
+        "summary": "出荷先更新",
+        "tags": [
+          "出荷先"
+        ],
+        "operationId": "Consignees#put",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "出荷先ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditConsignee"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "出荷先",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "consignee"
+                  ],
+                  "properties": {
+                    "consignee": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Consignee"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/suppliers": {
+      "get": {
+        "summary": "仕入先一覧",
+        "tags": [
+          "仕入先"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Suppliers"
+                }
+              }
+            }
+          }
+        },
+        "description": "仕入先一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "Suppliers#get"
+      },
+      "post": {
+        "summary": "仕入先作成",
+        "tags": [
+          "仕入先"
+        ],
+        "operationId": "Suppliers#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewSupplier"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "仕入先",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "supplier"
+                  ],
+                  "properties": {
+                    "consignee": {
+                      "$ref": "#/components/schemas/Supplier"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/suppliers/{id}": {
+      "put": {
+        "summary": "仕入先更新",
+        "tags": [
+          "仕入先"
+        ],
+        "operationId": "Suppliers#put",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "仕入先ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditSupplier"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "仕入先",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "supplier"
+                  ],
+                  "properties": {
+                    "consignee": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Supplier"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shops": {
+      "get": {
+        "summary": "ショップ一覧",
+        "tags": [
+          "ショップ"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Shops"
+                }
+              }
+            }
+          }
+        },
+        "description": "入荷履歴一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "Shops#get"
+      },
+      "post": {
+        "summary": "ショップ作成",
+        "tags": [
+          "ショップ"
+        ],
+        "operationId": "Shops#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewShop"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ショップ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "shop"
+                  ],
+                  "properties": {
+                    "shop": {
+                      "$ref": "#/components/schemas/Shop"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/external_service_accounts": {
+      "get": {
+        "summary": "外部連携アカウント一覧",
+        "tags": [
+          "外部連携"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalServiceAccounts"
+                }
+              }
+            }
+          }
+        },
+        "description": "外部連携アカウント一覧",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "operationId": "ExternalServiceAccounts#get"
+      }
+    },
+    "/api/v1/external_service_product_variants": {
+      "post": {
+        "summary": "商品の外部サービス連携紐付け作成",
+        "tags": [
+          "外部連携"
+        ],
+        "operationId": "ExternalServiceProductVariants#post",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewExternalServiceProductVariant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "外部連携紐付け",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "external_service_product_variant"
+                  ],
+                  "properties": {
+                    "external_service_product_variant": {
+                      "$ref": "#/components/schemas/ExternalServiceProductVariant"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/external_service_product_variants/{id}": {
+      "put": {
+        "summary": "商品の外部サービス連携紐付け更新",
+        "tags": [
+          "外部連携"
+        ],
+        "operationId": "ExternalServiceProductVariants#put",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "外部連携紐付けID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditExternalServiceProductVariant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "外部連携紐付け",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "external_service_product_variant"
+                  ],
+                  "properties": {
+                    "external_service_product_variant": {
+                      "$ref": "#/components/schemas/ExternalServiceProductVariant"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "商品の外部サービス連携紐付け削除",
+        "tags": [
+          "外部連携"
+        ],
+        "operationId": "ExternalServiceLinkedKeys#delete",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "外部連携紐付けID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "削除した外部連携紐付け",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "external_service_product_variant"
+                  ],
+                  "properties": {
+                    "external_service_product_variant": {
+                      "$ref": "#/components/schemas/ExternalServiceProductVariant"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "tokenUrl": "https://logikura.com/oauth/token",
+            "scopes": {
+              "read": "読み取り",
+              "write": "書き込み"
+            },
+            "authorizationUrl": "https://logikura.com/oauth/authorize",
+            "refreshUrl": "https://logikura.com/oauth/token"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Token": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer",
+            "default": "Bearer"
+          },
+          "expires_in": {
+            "type": "integer",
+            "example": 86000,
+            "description": "有効期限(秒)"
+          },
+          "refresh_token": {
+            "type": "string",
+            "example": "60303ae22b998861bce3b28f33eec1be758a213c86c93c076dbe9f558c11c752"
+          },
+          "created_at": {
+            "type": "integer",
+            "example": 1573532275
+          }
+        }
+      },
+      "RefreshTokenBody": {
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "enum": [
+              "refresh_token"
+            ]
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "client_secret": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string",
+            "example": "60303ae22b998861bce3b28f33eec1be758a213c86c93c076dbe9f558c11c752"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_secret",
+          "grant_type",
+          "refresh_token"
+        ]
+      },
+      "Id": {
+        "type": "integer",
+        "format": "integer",
+        "example": 1,
+        "minimum": 1
+      },
+      "NullableId": {
+        "type": "integer",
+        "format": "integer",
+        "example": 1,
+        "minimum": 1,
+        "nullable": true
+      },
+      "UpdatedAt": {
+        "type": "string",
+        "example": "2020-12-04T10:09:53.175+09:00",
+        "description": "最終更新日"
+      },
+      "Image": {
+        "type": "string",
+        "nullable": true,
+        "example": "https://logikura.com/images/searching.png",
+        "description": "画像URL"
+      },
+      "ProductVariantOption": {
+        "type": "string",
+        "nullable": true
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "name": {
+            "type": "string",
+            "example": "Tシャツ",
+            "description": "商品名"
+          },
+          "master_code": {
+            "type": "string",
+            "example": "LOGIKURA",
+            "description": "商品代表コード"
+          },
+          "description": {
+            "type": "string",
+            "example": "青色",
+            "description": "詳細"
+          },
+          "tax_type_id": {
+            "$ref": "#/components/schemas/TaxTypeId"
+          },
+          "countryCode": {
+            "type": "string",
+            "example": "JP",
+            "description": "原産国"
+          },
+          "suppliers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Supplier"
+            }
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductVariant"
+            }
+          }
+        }
+      },
+      "Products": {
+        "type": "object",
+        "required": [
+          "products"
+        ],
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            }
+          }
+        }
+      },
+      "NewProduct": {
+        "type": "object",
+        "required": [
+          "product"
+        ],
+        "properties": {
+          "product": {
+            "title": "商品",
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Tシャツ",
+                "description": "商品名"
+              },
+              "master_code": {
+                "type": "string",
+                "example": "LOGIKURA",
+                "description": "商品代表コード"
+              },
+              "description": {
+                "type": "string",
+                "example": "シンプルな無地Tシャツです",
+                "description": "商品説明"
+              },
+              "tax_type_id": {
+                "$ref": "#/components/schemas/TaxTypeId"
+              },
+              "countryCode": {
+                "type": "string",
+                "example": "JP",
+                "description": "原産国"
+              },
+              "suppliers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Supplier"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ProductVariant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "種類ID"
+          },
+          "product_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "商品マスターID"
+          },
+          "name": {
+            "type": "string",
+            "example": "Tシャツ",
+            "description": "種類名"
+          },
+          "product_code": {
+            "type": "string",
+            "example": "LOGIKURA-123",
+            "description": "商品コード"
+          },
+          "barcode": {
+            "type": "string",
+            "example": 2200020050008,
+            "description": "バーコード"
+          },
+          "sales_price": {
+            "type": "string",
+            "format": "double",
+            "example": 200,
+            "description": "販売価格"
+          },
+          "purchase_price": {
+            "type": "string",
+            "format": "double",
+            "example": 100,
+            "description": "仕入れ価格"
+          },
+          "weight": {
+            "type": "string",
+            "example": 100,
+            "description": "重量",
+            "nullable": true
+          },
+          "weight_unit": {
+            "type": "string",
+            "example": "g",
+            "description": "重量単位"
+          },
+          "image": {
+            "$ref": "#/components/schemas/Image"
+          },
+          "option1": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProductVariantOption"
+              }
+            ],
+            "example": "赤",
+            "description": "オプション1"
+          },
+          "option2": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProductVariantOption"
+              }
+            ],
+            "example": "Sサイズ",
+            "description": "オプション2"
+          },
+          "option3": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProductVariantOption"
+              }
+            ],
+            "example": "綿",
+            "description": "オプション3"
+          },
+          "order_point": {
+            "type": "integer",
+            "example": 100,
+            "minimum": 0,
+            "description": "種類発注点"
+          },
+          "sales_start_date": {
+            "type": "string",
+            "example": "2019-01-01",
+            "description": "販売開始日",
+            "nullable": true
+          }
+        }
+      },
+      "ProductVariants": {
+        "type": "object",
+        "required": [
+          "product_variants"
+        ],
+        "properties": {
+          "product_variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductVariant"
+            }
+          }
+        }
+      },
+      "NewProductVariant": {
+        "type": "object",
+        "required": [
+          "product_variant"
+        ],
+        "properties": {
+          "product_variant": {
+            "title": "種類",
+            "type": "object",
+            "required": [
+              "product_id",
+              "name",
+              "sales_price",
+              "purchase_price",
+              "weight_unit_id"
+            ],
+            "properties": {
+              "product_id": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Id"
+                  }
+                ],
+                "description": "商品マスターID"
+              },
+              "name": {
+                "type": "string",
+                "example": "tシャツ ロング",
+                "description": "名前"
+              },
+              "product_code": {
+                "type": "string",
+                "example": "LOGIKURA-123",
+                "description": "商品コード"
+              },
+              "barcode": {
+                "type": "string",
+                "example": 2200020050008,
+                "description": "バーコード"
+              },
+              "sales_price": {
+                "type": "integer",
+                "format": "double",
+                "example": 200,
+                "description": "販売価格"
+              },
+              "purchase_price": {
+                "type": "integer",
+                "format": "double",
+                "example": 100,
+                "description": "仕入れ価格"
+              },
+              "weight": {
+                "type": "string",
+                "example": 100,
+                "description": "重量"
+              },
+              "weight_unit_id": {
+                "$ref": "#/components/schemas/WeightUnitId"
+              },
+              "image": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Image"
+                  }
+                ],
+                "description": "画像URL<br>非同期に取得するので反映までに時間がかかります"
+              },
+              "option1": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductVariantOption"
+                  }
+                ],
+                "example": "赤",
+                "description": "オプション1"
+              },
+              "option2": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductVariantOption"
+                  }
+                ],
+                "example": "Sサイズ",
+                "description": "オプション2"
+              },
+              "option3": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductVariantOption"
+                  }
+                ],
+                "example": "綿",
+                "description": "オプション3"
+              },
+              "order_point": {
+                "type": "integer",
+                "example": 100,
+                "minimum": 0,
+                "description": "種類発注点"
+              },
+              "sales_start_date": {
+                "type": "string",
+                "example": "2019-01-01",
+                "description": "販売開始日"
+              }
+            }
+          }
+        }
+      },
+      "EditProductVariant": {
+        "type": "object",
+        "required": [
+          "product_variant"
+        ],
+        "properties": {
+          "product_variant": {
+            "title": "種類",
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 1,
+                "minimum": 1,
+                "description": "種類ーID"
+              },
+              "name": {
+                "type": "string",
+                "example": "tシャツ ロング",
+                "description": "名前"
+              },
+              "product_code": {
+                "type": "string",
+                "example": "LOGIKURA-123",
+                "description": "商品コード"
+              },
+              "barcode": {
+                "type": "string",
+                "example": 2200020050008,
+                "description": "バーコード"
+              },
+              "sales_price": {
+                "type": "integer",
+                "format": "double",
+                "example": 200,
+                "description": "販売価格"
+              },
+              "purchase_price": {
+                "type": "integer",
+                "format": "double",
+                "example": 100,
+                "description": "仕入れ価格"
+              },
+              "weight": {
+                "type": "string",
+                "example": 100,
+                "description": "重量"
+              },
+              "weight_unit_id": {
+                "$ref": "#/components/schemas/WeightUnitId"
+              },
+              "image": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Image"
+                  }
+                ],
+                "description": "画像URL<br>非同期に取得するので反映までに時間がかかります"
+              },
+              "option1": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductVariantOption"
+                  }
+                ],
+                "example": "赤",
+                "description": "オプション1"
+              },
+              "option2": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductVariantOption"
+                  }
+                ],
+                "example": "Sサイズ",
+                "description": "オプション2"
+              },
+              "option3": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductVariantOption"
+                  }
+                ],
+                "example": "綿",
+                "description": "オプション3"
+              },
+              "order_point": {
+                "type": "integer",
+                "example": 100,
+                "minimum": 0,
+                "description": "種類発注点"
+              },
+              "sales_start_date": {
+                "type": "string",
+                "example": "2019-01-01",
+                "description": "販売開始日"
+              }
+            }
+          }
+        }
+      },
+      "NewOrEditReceivingItem": {
+        "type": "object",
+        "required": [
+          "product_variant_id",
+          "purchase_order_quantity",
+          "price"
+        ],
+        "properties": {
+          "product_variant_id": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "purchase_order_quantity": {
+            "type": "integer",
+            "example": 1,
+            "description": "予定数量"
+          },
+          "price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Float"
+              }
+            ],
+            "description": "仕入単価"
+          },
+          "lot_code": {
+            "type": "string",
+            "description": "ロットコード",
+            "example": "LOT001",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date",
+            "description": "消費期限",
+            "example": "2025-12-31",
+            "nullable": true
+          }
+        }
+      },
+      "ReceivingScheduleBodyParameter": {
+        "type": "object",
+        "properties": {
+          "warehouse_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "拠点ID"
+          },
+          "supplier_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "仕入先ID"
+          },
+          "shipping_slip_number": {
+            "type": "string",
+            "description": "納品書番号",
+            "example": "ABCDEFG012345",
+            "nullable": true
+          },
+          "tracking_number": {
+            "type": "string",
+            "description": "追跡番号",
+            "example": "1234-5678-9012",
+            "nullable": true
+          },
+          "box_quantity": {
+            "type": "integer",
+            "description": "個口数",
+            "example": 2,
+            "nullable": true
+          },
+          "due_date": {
+            "type": "string",
+            "example": "2019-01-01",
+            "description": "入荷予定日",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "詳細",
+            "example": "メモです",
+            "nullable": true
+          }
+        }
+      },
+      "NewReceivingSchedule": {
+        "type": "object",
+        "required": [
+          "receiving_schedule"
+        ],
+        "properties": {
+          "receiving_schedule": {
+            "required": [
+              "receiving_items",
+              "warehouse_id",
+              "supplier_id"
+            ],
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "receiving_items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/NewOrEditReceivingItem"
+                    }
+                  }
+                }
+              },
+              {
+                "$ref": "#/components/schemas/ReceivingScheduleBodyParameter"
+              }
+            ]
+          }
+        }
+      },
+      "EditReceivingSchedule": {
+        "type": "object",
+        "required": [
+          "receiving_schedule"
+        ],
+        "properties": {
+          "receiving_schedule": {
+            "type": "object",
+            "required": [
+              "receiving_items",
+              "warehouse_id",
+              "supplier_id"
+            ],
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "receiving_items": {
+                    "type": "array",
+                    "items": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/Id"
+                                }
+                              ],
+                              "description": "入荷商品ID"
+                            }
+                          }
+                        },
+                        {
+                          "$ref": "#/components/schemas/NewOrEditReceivingItem"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "$ref": "#/components/schemas/ReceivingScheduleBodyParameter"
+              }
+            ]
+          }
+        }
+      },
+      "NewReceivingHistoryItem": {
+        "type": "object",
+        "required": [
+          "product_variant_id",
+          "stocked_quantity",
+          "price"
+        ],
+        "properties": {
+          "product_variant_id": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "stocked_quantity": {
+            "type": "integer",
+            "example": 10,
+            "description": "入荷数"
+          },
+          "price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Float"
+              }
+            ],
+            "description": "仕入単価"
+          },
+          "lot_code": {
+            "type": "string",
+            "description": "ロットコード",
+            "example": "LOT001",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date",
+            "description": "消費期限",
+            "example": "2025-12-31",
+            "nullable": true
+          }
+        }
+      },
+      "ReceivingHistoryBodyParameter": {
+        "type": "object",
+        "properties": {
+          "warehouse_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "拠点ID"
+          },
+          "supplier_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "仕入先ID"
+          },
+          "shipping_slip_number": {
+            "type": "string",
+            "description": "納品書番号",
+            "example": "ABCDEFG012345",
+            "nullable": true
+          },
+          "tracking_number": {
+            "type": "string",
+            "description": "追跡番号",
+            "example": "1234-5678-9012",
+            "nullable": true
+          },
+          "box_quantity": {
+            "type": "integer",
+            "description": "個口数",
+            "example": 2,
+            "nullable": true
+          },
+          "received_date": {
+            "type": "string",
+            "format": "date",
+            "example": "2019-01-01",
+            "description": "入荷日"
+          },
+          "description": {
+            "type": "string",
+            "description": "詳細",
+            "example": "メモです",
+            "nullable": true
+          }
+        }
+      },
+      "NewReceivingHistory": {
+        "type": "object",
+        "required": [
+          "receiving_history"
+        ],
+        "properties": {
+          "receiving_history": {
+            "required": [
+              "receiving_items",
+              "warehouse_id",
+              "received_date"
+            ],
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "receiving_items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/NewReceivingHistoryItem"
+                    }
+                  }
+                }
+              },
+              {
+                "$ref": "#/components/schemas/ReceivingHistoryBodyParameter"
+              }
+            ]
+          }
+        }
+      },
+      "ReceivingSchedule": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ReceivingItems"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "warehouse_id",
+              "supplier_id",
+              "shipping_slip_number",
+              "tracking_number",
+              "box_quantity",
+              "due_date",
+              "received_date",
+              "description",
+              "updated_at"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 1,
+                "minimum": 1,
+                "description": "入荷ID"
+              },
+              "warehouse_id": {
+                "$ref": "#/components/schemas/NullableId",
+                "description": "拠点ID"
+              },
+              "supplier_id": {
+                "$ref": "#/components/schemas/Id",
+                "description": "仕入先ID"
+              },
+              "shipping_slip_number": {
+                "type": "string",
+                "description": "納品書番号",
+                "example": "ABCDEFG012345",
+                "nullable": true
+              },
+              "tracking_number": {
+                "type": "string",
+                "description": "追跡番号",
+                "example": "1234-5678-9012",
+                "nullable": true
+              },
+              "box_quantity": {
+                "type": "integer",
+                "description": "個口数",
+                "example": 2,
+                "nullable": true
+              },
+              "due_date": {
+                "type": "string",
+                "example": "2019-01-01",
+                "description": "入荷予定日",
+                "nullable": true
+              },
+              "received_date": {
+                "type": "string",
+                "nullable": true,
+                "example": "2019-01-03",
+                "description": "入荷日"
+              },
+              "description": {
+                "type": "string",
+                "description": "詳細",
+                "example": "メモです",
+                "nullable": true
+              },
+              "updated_at": {
+                "$ref": "#/components/schemas/UpdatedAt"
+              }
+            }
+          }
+        ]
+      },
+      "ReceivingSchedules": {
+        "type": "object",
+        "required": [
+          "receiving_schedules"
+        ],
+        "properties": {
+          "receiving_schedules": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ReceivingSchedule"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "progress_state": {
+                      "type": "string",
+                      "title": "progress_state",
+                      "description": "入荷ステータス\n- inspecting: 検品中",
+                      "example": "inspecting"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ReceivingHistories": {
+        "type": "object",
+        "required": [
+          "receiving_histories"
+        ],
+        "properties": {
+          "receiving_histories": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ReceivingSchedule"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "progress_state": {
+                      "type": "string",
+                      "title": "progress_state",
+                      "description": "入荷ステータス\n- completed: 入荷完了",
+                      "example": "completed"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ReceivingHistory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ReceivingSchedule"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "progress_state": {
+                "type": "string",
+                "title": "progress_state",
+                "description": "入荷ステータス\n- completed: 入荷完了",
+                "example": "completed"
+              }
+            }
+          }
+        ]
+      },
+      "ReceivingItem": {
+        "type": "object",
+        "title": "入荷商品",
+        "required": [
+          "id",
+          "product_variant_id",
+          "receiving_schedule_id",
+          "inventory_id",
+          "price",
+          "purchase_order_quantity",
+          "stocked_quantity",
+          "received_date",
+          "progress_state"
+        ],
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "ID"
+          },
+          "receiving_schedule_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "入荷予定ID"
+          },
+          "product_variant_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "種類ID"
+          },
+          "inventory_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NullableId"
+              }
+            ],
+            "description": "在庫ID"
+          },
+          "price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Float"
+              }
+            ],
+            "description": "仕入単価"
+          },
+          "purchase_order_quantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Integer"
+              }
+            ],
+            "description": "予定数量"
+          },
+          "stocked_quantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NullableInteger"
+              }
+            ],
+            "description": "入荷数"
+          },
+          "received_date": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NullableDate"
+              }
+            ],
+            "description": "入荷日"
+          },
+          "progress_state": {
+            "type": "string",
+            "description": "入荷ステータス\n- inspecting: 検品中\n- completed: 入荷完了",
+            "enum": [
+              "inspecting",
+              "completed"
+            ]
+          },
+          "lot_code": {
+            "type": "string",
+            "description": "ロット番号",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date",
+            "description": "有効期限",
+            "nullable": true
+          }
+        }
+      },
+      "ReceivingItems": {
+        "type": "object",
+        "required": [
+          "receiving_items"
+        ],
+        "properties": {
+          "receiving_items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReceivingItem"
+            }
+          }
+        }
+      },
+      "DeliveryMethod": {
+        "type": "object",
+        "nullable": true,
+        "required": [
+          "name",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "sagawa_e_hiden_2",
+            "description": "配送方法コード"
+          },
+          "name": {
+            "type": "string",
+            "description": "配送方法名",
+            "example": "佐川e飛伝II"
+          }
+        }
+      },
+      "ShippingSchedule": {
+        "type": "object",
+        "required": [
+          "id",
+          "code",
+          "due_date",
+          "tracking_number",
+          "description",
+          "consignee_id",
+          "sales_order",
+          "delivery_method"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ShippingItems"
+          },
+          {
+            "$ref": "#/components/schemas/ShippingCompositeItems"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": "1",
+                "minimum": 1,
+                "description": "出荷予定ID"
+              },
+              "code": {
+                "type": "string",
+                "example": "qpV0201911071602",
+                "description": "出荷コード"
+              },
+              "due_date": {
+                "type": "string",
+                "example": "2019-01-01",
+                "description": "出荷予定日",
+                "nullable": true
+              },
+              "tracking_number": {
+                "type": "string",
+                "example": "1234-5678-9012",
+                "description": "追跡番号",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "example": "自社ECからの受注",
+                "description": "詳細",
+                "nullable": true
+              },
+              "delivery_slip_note": {
+                "type": "string",
+                "example": "割れ物注意",
+                "description": "送り状用備考",
+                "nullable": true
+              },
+              "delivery_date": {
+                "type": "string",
+                "example": "2019-01-01",
+                "description": "配送希望日",
+                "nullable": true
+              },
+              "picking_note": {
+                "type": "string",
+                "example": "同梱物あり",
+                "description": "ピッキング指示欄",
+                "nullable": true
+              },
+              "consignee_id": {
+                "type": "integer",
+                "example": "1",
+                "minimum": 1,
+                "description": "出荷先ID"
+              },
+              "sales_order": {
+                "$ref": "#/components/schemas/SalesOrder"
+              },
+              "delivery_method": {
+                "$ref": "#/components/schemas/DeliveryMethod"
+              }
+            }
+          }
+        ]
+      },
+      "ShippingSchedules": {
+        "type": "object",
+        "required": [
+          "shipping_schedules"
+        ],
+        "properties": {
+          "shipping_schedules": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ShippingSchedule"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "progress_state": {
+                      "type": "string",
+                      "description": "出荷ステータス\n- idle: 出荷予定\n- inspecting: 検品中\n- shipping: 出荷作業中",
+                      "enum": [
+                        "idle",
+                        "inspecting",
+                        "shipping"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ShippingItem": {
+        "type": "object",
+        "title": "出荷予定商品",
+        "required": [
+          "id",
+          "product_variant_id",
+          "sales_order_quantity",
+          "shipping_quantity",
+          "price",
+          "note",
+          "progress_state"
+        ],
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "出荷商品ID"
+          },
+          "product_variant_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "種類ID"
+          },
+          "sales_order_quantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Integer"
+              }
+            ],
+            "description": "予定数量"
+          },
+          "shipping_quantity": {
+            "type": "integer",
+            "example": 1,
+            "description": "出荷数",
+            "nullable": true
+          },
+          "price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Float"
+              }
+            ],
+            "description": "販売単価"
+          },
+          "note": {
+            "type": "string",
+            "example": "メモです",
+            "description": "メモ",
+            "nullable": true
+          },
+          "progress_state": {
+            "type": "string",
+            "description": "出荷ステータス\n- idle: 出荷予定\n- inspecting: 検品中\n- shipping: 出荷作業中\n- completed: 出荷完了",
+            "enum": [
+              "idle",
+              "inspecting",
+              "shipping",
+              "completed"
+            ]
+          },
+          "lot_code": {
+            "type": "string",
+            "description": "ロット番号",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date",
+            "description": "有効期限",
+            "nullable": true
+          },
+          "packing_items": {
+            "type": "array",
+            "description": "梱包商品。出荷履歴API（/api/v1/shipping_histories）でのみ値が含まれます。出荷予定API（/api/v1/shipping_schedules）では常に空配列が返されます。",
+            "items": {
+              "$ref": "#/components/schemas/PackingItem"
+            }
+          }
+        }
+      },
+      "PackingItem": {
+        "type": "object",
+        "title": "梱包商品",
+        "required": [
+          "id",
+          "packed_quantity",
+          "stock_id"
+        ],
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "梱包商品ID"
+          },
+          "packed_quantity": {
+            "type": "integer",
+            "example": 1,
+            "description": "梱包数量"
+          },
+          "stock_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "在庫ID"
+          }
+        }
+      },
+      "ShippingItems": {
+        "type": "object",
+        "required": [
+          "shipping_items"
+        ],
+        "properties": {
+          "shipping_items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShippingItem"
+            }
+          }
+        }
+      },
+      "NewOrEditShippingItem": {
+        "type": "object",
+        "title": "出荷予定商品",
+        "required": [
+          "product_variant_id",
+          "sales_order_quantity",
+          "price"
+        ],
+        "properties": {
+          "product_variant_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "種類ID"
+          },
+          "sales_order_quantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Integer"
+              }
+            ],
+            "description": "予定数量"
+          },
+          "price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Integer"
+              }
+            ],
+            "description": "販売単価"
+          },
+          "note": {
+            "type": "string",
+            "example": "メモです",
+            "description": "メモ"
+          },
+          "lot_code": {
+            "type": "string",
+            "description": "ロット番号",
+            "example": "LOT001",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date",
+            "description": "有効期限",
+            "example": "2025-12-31",
+            "nullable": true
+          }
+        }
+      },
+      "NewOrEditShippingHistoryItem": {
+        "type": "object",
+        "title": "出荷履歴商品",
+        "required": [
+          "inventory_id",
+          "shipping_quantity",
+          "price"
+        ],
+        "properties": {
+          "inventory_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "種類ID"
+          },
+          "shipping_quantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Integer"
+              }
+            ],
+            "description": "出荷数"
+          },
+          "price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Integer"
+              }
+            ],
+            "description": "販売単価"
+          },
+          "note": {
+            "type": "string",
+            "example": "メモです",
+            "description": "メモ"
+          },
+          "lot_code": {
+            "type": "string",
+            "description": "ロット番号",
+            "example": "LOT001",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date",
+            "description": "有効期限",
+            "example": "2025-12-31",
+            "nullable": true
+          }
+        }
+      },
+      "ShippingCompositeItem": {
+        "type": "object",
+        "title": "出荷予定セット品",
+        "required": [
+          "id",
+          "composite_item_id",
+          "quantity",
+          "price",
+          "note"
+        ],
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "出荷商品ID"
+          },
+          "composite_item_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "セット品ID"
+          },
+          "quantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Integer"
+              }
+            ],
+            "description": "予定数量"
+          },
+          "price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Float"
+              }
+            ],
+            "description": "販売単価"
+          },
+          "note": {
+            "type": "string",
+            "example": "メモです",
+            "description": "メモ",
+            "nullable": true
+          }
+        }
+      },
+      "ShippingCompositeItems": {
+        "type": "object",
+        "required": [
+          "shipping_composite_items"
+        ],
+        "properties": {
+          "shipping_composite_items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShippingCompositeItem"
+            }
+          }
+        }
+      },
+      "NewOrEditShippingCompositeItem": {
+        "type": "object",
+        "title": "出荷予定セット品",
+        "required": [
+          "composite_item_id",
+          "quantity",
+          "price"
+        ],
+        "properties": {
+          "composite_item_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "セット品ID"
+          },
+          "quantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Integer"
+              }
+            ],
+            "description": "予定数量"
+          },
+          "price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Integer"
+              }
+            ],
+            "description": "販売単価"
+          },
+          "note": {
+            "type": "string",
+            "example": "メモです",
+            "description": "メモ"
+          }
+        }
+      },
+      "SalesOrder": {
+        "type": "object",
+        "title": "受注",
+        "nullable": true,
+        "required": [
+          "shop_id",
+          "order_number",
+          "order_date",
+          "shipping_cost",
+          "sales_commission",
+          "other_cost",
+          "point",
+          "total_price",
+          "gift_message"
+        ],
+        "properties": {
+          "billing_address_id": {
+            "$ref": "#/components/schemas/NullableId",
+            "description": "購入先ID"
+          },
+          "shop_id": {
+            "$ref": "#/components/schemas/NullableId",
+            "description": "ショップID"
+          },
+          "order_number": {
+            "type": "string",
+            "example": "A-123456",
+            "description": "注文番号",
+            "nullable": true
+          },
+          "order_date": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Date"
+              }
+            ],
+            "description": "注文日",
+            "nullable": true
+          },
+          "shipping_cost": {
+            "type": "integer",
+            "example": 100,
+            "description": "送料",
+            "nullable": true
+          },
+          "sales_commission": {
+            "type": "integer",
+            "example": 100,
+            "description": "販売手数料",
+            "nullable": true
+          },
+          "other_cost": {
+            "type": "integer",
+            "example": 100,
+            "description": "その他費用",
+            "nullable": true
+          },
+          "point": {
+            "type": "integer",
+            "example": 100,
+            "description": "ポイント",
+            "nullable": true
+          },
+          "total_price": {
+            "type": "integer",
+            "example": 100,
+            "description": "総計",
+            "nullable": true
+          },
+          "gift_message": {
+            "type": "string",
+            "example": "おめでとうございます",
+            "description": "ギフトメッセージ",
+            "nullable": true
+          },
+          "gift_enabled": {
+            "type": "boolean",
+            "example": true,
+            "description": "ギフトフラグ",
+            "nullable": true,
+            "default": false
+          },
+          "external_service_code": {
+            "type": "string",
+            "example": "A-12345",
+            "description": "外部連携コード",
+            "nullable": true
+          },
+          "external_service_account": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NullableExternalServiceAccount"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "ShippingScheduleBodyParameter": {
+        "type": "object",
+        "required": [
+          "consignee_id"
+        ],
+        "properties": {
+          "consignee_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "出荷先ID"
+          },
+          "tracking_number": {
+            "type": "string",
+            "description": "追跡番号",
+            "example": "1234-5678-9012",
+            "nullable": true
+          },
+          "due_date": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Date"
+              }
+            ],
+            "description": "出荷予定日",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "詳細",
+            "example": "メモです",
+            "nullable": true
+          },
+          "delivery_slip_note": {
+            "type": "string",
+            "example": "割れ物注意",
+            "description": "送り状用備考",
+            "nullable": true
+          },
+          "delivery_date": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Date"
+              }
+            ],
+            "description": "配送希望日",
+            "nullable": true
+          },
+          "picking_note": {
+            "type": "string",
+            "example": "同梱物あり",
+            "description": "ピッキング指示欄",
+            "nullable": true
+          },
+          "delivery_method_code": {
+            "type": "string",
+            "description": "<a href=\"https://support.logikura.jp/hc/ja/articles/900001294826-%E5%87%BA%E8%8D%B7%E4%BA%88%E5%AE%9A%E3%81%AE%E7%99%BB%E9%8C%B2-CSV%E9%A0%85%E7%9B%AE%E4%B8%80%E8%A6%A7-#h_596c5d64-9f42-40fc-a6f0-858d2b5a3099\">配送方法コード</a>\n",
+            "example": "sagawa_e_hiden_2",
+            "nullable": true
+          },
+          "delivery_specification_time": {
+            "type": "string",
+            "description": "<a href=\"https://support.logikura.jp/hc/ja/articles/900001294826-%E5%87%BA%E8%8D%B7%E4%BA%88%E5%AE%9A%E3%81%AE%E7%99%BB%E9%8C%B2-CSV%E9%A0%85%E7%9B%AE%E4%B8%80%E8%A6%A7-#h_05a94ff7-1243-435c-a8b8-a41e2228091f\">時間帯指定</a>\n",
+            "example": "01",
+            "nullable": true
+          }
+        }
+      },
+      "NewShippingSchedule": {
+        "type": "object",
+        "required": [
+          "sales_order",
+          "shipping_schedule"
+        ],
+        "properties": {
+          "sales_order": {
+            "type": "object",
+            "$ref": "#/components/schemas/SalesOrder"
+          },
+          "shipping_schedule": {
+            "title": "出荷予定",
+            "allOf": [
+              {
+                "type": "object",
+                "required": [
+                  "shipping_items",
+                  "shipping_composite_items"
+                ],
+                "properties": {
+                  "shipping_items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/NewOrEditShippingItem"
+                    }
+                  },
+                  "shipping_composite_items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/NewOrEditShippingCompositeItem"
+                    }
+                  }
+                }
+              },
+              {
+                "$ref": "#/components/schemas/ShippingScheduleBodyParameter"
+              }
+            ]
+          }
+        }
+      },
+      "EditShippingSchedule": {
+        "type": "object",
+        "required": [
+          "sales_order",
+          "shipping_schedule"
+        ],
+        "properties": {
+          "sales_order": {
+            "type": "object",
+            "$ref": "#/components/schemas/SalesOrder"
+          },
+          "shipping_schedule": {
+            "title": "出荷予定",
+            "allOf": [
+              {
+                "type": "object",
+                "required": [
+                  "shipping_items",
+                  "shipping_composite_items"
+                ],
+                "properties": {
+                  "shipping_items": {
+                    "type": "array",
+                    "items": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/Id"
+                                }
+                              ],
+                              "description": "出荷商品ID"
+                            }
+                          }
+                        },
+                        {
+                          "$ref": "#/components/schemas/NewOrEditShippingItem"
+                        }
+                      ]
+                    }
+                  },
+                  "shipping_composite_items": {
+                    "type": "array",
+                    "items": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/Id"
+                                }
+                              ],
+                              "description": "出荷セット品ID"
+                            }
+                          }
+                        },
+                        {
+                          "$ref": "#/components/schemas/NewOrEditShippingCompositeItem"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "$ref": "#/components/schemas/ShippingScheduleBodyParameter"
+              }
+            ]
+          }
+        }
+      },
+      "NewShippingHistory": {
+        "type": "object",
+        "required": [
+          "sales_order",
+          "shipping_history"
+        ],
+        "properties": {
+          "sales_order": {
+            "type": "object",
+            "$ref": "#/components/schemas/SalesOrder"
+          },
+          "shipping_history": {
+            "type": "object",
+            "title": "出荷履歴",
+            "required": [
+              "shipping_items",
+              "consignee_id",
+              "warehouse_id"
+            ],
+            "properties": {
+              "shipping_items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/NewOrEditShippingHistoryItem"
+                }
+              },
+              "warehouse_id": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Id"
+                  }
+                ],
+                "description": "拠点ID"
+              },
+              "consignee_id": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Id"
+                  }
+                ],
+                "description": "出荷先ID"
+              },
+              "tracking_number": {
+                "type": "string",
+                "description": "追跡番号",
+                "example": "1234-5678-9012",
+                "nullable": true
+              },
+              "shipped_date": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Date"
+                  }
+                ],
+                "description": "出荷実績日",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "description": "詳細",
+                "example": "メモです",
+                "nullable": true
+              }
+            }
+          }
+        }
+      },
+      "ShippingHistory": {
+        "title": "出履履歴",
+        "type": "object",
+        "required": [
+          "shipping_history"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ShippingSchedule"
+          },
+          {
+            "type": "object",
+            "required": [
+              "progress_state",
+              "shipped_date"
+            ],
+            "properties": {
+              "progress_state": {
+                "type": "string",
+                "title": "progress_state",
+                "description": "出荷ステータス\n- completed: 出荷完了",
+                "example": "completed"
+              },
+              "shipped_date": {
+                "type": "string",
+                "title": "shipped_date",
+                "description": "出荷実績日",
+                "example": "2019-01-01"
+              }
+            }
+          }
+        ]
+      },
+      "ShippingHistories": {
+        "type": "object",
+        "required": [
+          "shipping_histories"
+        ],
+        "properties": {
+          "shipping_histories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShippingHistory"
+            }
+          }
+        }
+      },
+      "Inventory": {
+        "type": "object",
+        "required": [
+          "id",
+          "warehouse_id",
+          "product_variant",
+          "quantity",
+          "updated_at",
+          "will_pick_quantity",
+          "not_assigned_quantity"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1,
+            "minimum": 1,
+            "description": "在庫ID"
+          },
+          "warehouse_id": {
+            "type": "integer",
+            "example": 1,
+            "minimum": 1,
+            "description": "拠点ID"
+          },
+          "product_variant": {
+            "$ref": "#/components/schemas/ProductVariant"
+          },
+          "quantity": {
+            "type": "integer",
+            "example": 1000,
+            "minimum": 0,
+            "description": "在庫数"
+          },
+          "updated_at": {
+            "$ref": "#/components/schemas/UpdatedAt"
+          },
+          "will_pick_quantity": {
+            "type": "integer",
+            "example": 2,
+            "minimum": 0,
+            "description": "出荷中数量"
+          },
+          "not_assigned_quantity": {
+            "type": "integer",
+            "example": 998,
+            "minimum": 0,
+            "description": "未割当数量"
+          }
+        }
+      },
+      "NewInventory": {
+        "type": "object",
+        "required": [
+          "inventory"
+        ],
+        "properties": {
+          "inventory": {
+            "title": "在庫",
+            "type": "object",
+            "required": [
+              "warehouse_id",
+              "product_variant_id",
+              "location_id",
+              "quantity"
+            ],
+            "properties": {
+              "warehouse_id": {
+                "type": "integer",
+                "example": 1,
+                "minimum": 1,
+                "description": "拠点ID"
+              },
+              "location_id": {
+                "type": "integer",
+                "example": 1,
+                "minimum": 1,
+                "description": "ロケーションID",
+                "nullable": true
+              },
+              "product_variant_id": {
+                "type": "integer",
+                "example": 1,
+                "minimum": 1,
+                "description": "種類ID"
+              },
+              "quantity": {
+                "type": "integer",
+                "example": 100,
+                "description": "在庫数"
+              }
+            }
+          }
+        }
+      },
+      "Inventories": {
+        "type": "object",
+        "required": [
+          "inventories"
+        ],
+        "properties": {
+          "inventories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Inventory"
+            }
+          }
+        }
+      },
+      "Stock": {
+        "type": "object",
+        "title": "在庫詳細",
+        "required": [
+          "id",
+          "inventory_id",
+          "lot_code",
+          "expiration_date",
+          "quantity"
+        ],
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "在庫ID"
+          },
+          "inventory_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "インベントリID"
+          },
+          "lot_code": {
+            "type": "string",
+            "description": "ロット番号",
+            "example": "LOT001",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date",
+            "description": "有効期限",
+            "example": "2025-12-31",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "integer",
+            "example": 1000,
+            "minimum": 0,
+            "description": "在庫数"
+          }
+        }
+      },
+      "RelationshipAddress": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "code",
+            "description": "コード"
+          },
+          "name": {
+            "type": "string",
+            "example": "name",
+            "description": "名称"
+          },
+          "email": {
+            "type": "string",
+            "example": "text@example.com",
+            "description": "メールアドレス"
+          },
+          "phone_number": {
+            "type": "string",
+            "example": "0300000000",
+            "description": "電話番号"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "0000000",
+            "description": "郵便番号"
+          },
+          "address1": {
+            "type": "string",
+            "example": "東京都ロジクラ区",
+            "description": "住所1"
+          },
+          "address2": {
+            "type": "string",
+            "example": "ロジクラ1-1-1",
+            "description": "住所2"
+          },
+          "description": {
+            "type": "string",
+            "example": "詳細",
+            "description": "詳細"
+          }
+        }
+      },
+      "Consignee": {
+        "title": "出荷先",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/Id",
+                "description": "ID"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/RelationshipAddress"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "updated_at": {
+                "$ref": "#/components/schemas/UpdatedAt"
+              }
+            }
+          }
+        ]
+      },
+      "Consignees": {
+        "type": "object",
+        "required": [
+          "consignees"
+        ],
+        "properties": {
+          "consignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Consignee"
+            }
+          }
+        }
+      },
+      "NewConsignee": {
+        "type": "object",
+        "required": [
+          "consignee"
+        ],
+        "properties": {
+          "consignee": {
+            "title": "出荷先",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationshipAddress"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "consignee_type": {
+                    "type": "string",
+                    "example": "wholesaler",
+                    "description": "コード",
+                    "enum": [
+                      "wholesaler",
+                      "customer"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "EditConsignee": {
+        "type": "object",
+        "required": [
+          "consignee"
+        ],
+        "properties": {
+          "consignee": {
+            "title": "出荷先",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationshipAddress"
+              }
+            ]
+          }
+        }
+      },
+      "Supplier": {
+        "title": "仕入先",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/Id",
+                "description": "ID"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/RelationshipAddress"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "updated_at": {
+                "$ref": "#/components/schemas/UpdatedAt"
+              }
+            }
+          }
+        ]
+      },
+      "Suppliers": {
+        "type": "object",
+        "required": [
+          "suppliers"
+        ],
+        "properties": {
+          "suppliers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Supplier"
+            }
+          }
+        }
+      },
+      "NewSupplier": {
+        "type": "object",
+        "required": [
+          "supplier"
+        ],
+        "properties": {
+          "supplier": {
+            "title": "出荷先",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationshipAddress"
+              }
+            ]
+          }
+        }
+      },
+      "EditSupplier": {
+        "type": "object",
+        "required": [
+          "supplier"
+        ],
+        "properties": {
+          "supplier": {
+            "title": "仕入先",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationshipAddress"
+              }
+            ]
+          }
+        }
+      },
+      "NewShop": {
+        "type": "object",
+        "required": [
+          "shop"
+        ],
+        "properties": {
+          "shop": {
+            "title": "ショップ",
+            "type": "object",
+            "required": [
+              "name",
+              "code",
+              "sales_channel_id",
+              "delivery_method_id",
+              "email",
+              "phone_number",
+              "postal_code",
+              "address1",
+              "address2",
+              "note",
+              "tax_included"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "ショップ名",
+                "example": "ロジクラショップ"
+              },
+              "code": {
+                "type": "string",
+                "description": "ショップコード",
+                "example": "LOGIKURA-SHOP",
+                "nullable": true
+              },
+              "sales_channel_id": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/NullableId"
+                  }
+                ],
+                "description": "販売チャネルID(モール/カート)"
+              },
+              "delivery_method_id": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/NullableId"
+                  }
+                ],
+                "description": "配送方法ID"
+              },
+              "email": {
+                "type": "string",
+                "description": "メールアドレス",
+                "example": "test@example.com",
+                "nullable": true
+              },
+              "phone_number": {
+                "type": "string",
+                "description": "電話番号",
+                "example": "03-6362-4084",
+                "nullable": true
+              },
+              "address1": {
+                "type": "string",
+                "example": "東京都港区",
+                "description": "住所1",
+                "nullable": true
+              },
+              "address2": {
+                "type": "string",
+                "example": "1-1-1 ロジクラビル2F",
+                "description": "住所2",
+                "nullable": true
+              },
+              "note": {
+                "type": "string",
+                "description": "備考",
+                "example": "メモです",
+                "nullable": true
+              },
+              "tax_included": {
+                "type": "boolean",
+                "description": "税区分\ntrue: 税込み\nfalse: 税抜\n",
+                "example": true,
+                "nullable": true
+              }
+            }
+          }
+        }
+      },
+      "Shop": {
+        "title": "ショップ",
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "code",
+          "sales_channel_id",
+          "delivery_method_id",
+          "email",
+          "phone_number",
+          "postal_code",
+          "address1",
+          "address2",
+          "note",
+          "tax_included",
+          "image"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Id",
+            "description": "ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "ショップ名",
+            "example": "ロジクラショップ"
+          },
+          "code": {
+            "type": "string",
+            "description": "ショップコード",
+            "example": "LOGIKURA-SHOP",
+            "nullable": true
+          },
+          "sales_channel_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NullableId"
+              }
+            ],
+            "description": "販売チャネルID(モール/カート)"
+          },
+          "delivery_method_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NullableId"
+              }
+            ],
+            "description": "配送方法ID"
+          },
+          "email": {
+            "type": "string",
+            "description": "メールアドレス",
+            "example": "test@example.com",
+            "nullable": true
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "電話番号",
+            "example": "03-6362-4084",
+            "nullable": true
+          },
+          "address1": {
+            "type": "string",
+            "example": "東京都港区",
+            "description": "住所1",
+            "nullable": true
+          },
+          "address2": {
+            "type": "string",
+            "example": "1-1-1 ロジクラビル2F",
+            "description": "住所2",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "description": "備考",
+            "example": "メモです",
+            "nullable": true
+          },
+          "tax_included": {
+            "type": "boolean",
+            "description": "税区分\ntrue: 税込み\nfalse: 税抜\n",
+            "example": true,
+            "nullable": true
+          },
+          "image": {
+            "$ref": "#/components/schemas/Image"
+          }
+        }
+      },
+      "Shops": {
+        "type": "object",
+        "required": [
+          "shops"
+        ],
+        "properties": {
+          "shops": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Shop"
+            }
+          }
+        }
+      },
+      "Warehouse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1,
+            "minimum": 1,
+            "description": "拠点ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "拠点名",
+            "example": "拠点A"
+          },
+          "code": {
+            "type": "string",
+            "description": "拠点コード",
+            "example": "WAREHOUSE-01"
+          },
+          "updated_at": {
+            "$ref": "#/components/schemas/UpdatedAt"
+          }
+        }
+      },
+      "Warehouses": {
+        "type": "object",
+        "required": [
+          "warehouses"
+        ],
+        "properties": {
+          "warehouses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Warehouse"
+            }
+          }
+        }
+      },
+      "ExternalServiceAccounts": {
+        "type": "object",
+        "required": [
+          "external_service_accounts"
+        ],
+        "properties": {
+          "external_service_accounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalServiceAccount"
+            }
+          }
+        }
+      },
+      "ExternalServiceAccount": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "uid",
+          "external_service_name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1,
+            "minimum": 1,
+            "description": "外部連携アカウントID"
+          },
+          "name": {
+            "type": "string",
+            "description": "連携アカウント名",
+            "example": "株式会社ロジクラ"
+          },
+          "uid": {
+            "type": "string",
+            "description": "連携先ID名",
+            "example": "external-uid"
+          },
+          "shop_id": {
+            "type": "integer",
+            "description": "ショップID（店舗連携時のみ）",
+            "example": 1,
+            "minimum": 1,
+            "nullable": true
+          },
+          "external_service_name": {
+            "type": "string",
+            "description": "外部連携サービス名",
+            "example": "スマレジ"
+          }
+        }
+      },
+      "NullableExternalServiceAccount": {
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ExternalServiceAccount"
+          },
+          {
+            "nullable": true
+          }
+        ]
+      },
+      "ExternalServiceProductVariant": {
+        "title": "外部連携紐付け",
+        "type": "object",
+        "required": [
+          "id",
+          "product_variant_id",
+          "external_service_product_code",
+          "external_service_account_id"
+        ],
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "外部連携紐付けID"
+          },
+          "external_service_account_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "外部連携アカウントID"
+          },
+          "product_variant_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "種類ID"
+          },
+          "external_service_product_code": {
+            "type": "string",
+            "description": "連携先コード",
+            "example": "SHOPIFY-PRODUCT-CODE"
+          }
+        }
+      },
+      "NewExternalServiceProductVariant": {
+        "type": "object",
+        "required": [
+          "external_service_account_id",
+          "product_variant_id",
+          "external_service_product_code"
+        ],
+        "properties": {
+          "external_service_account_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "外部連携アカウントID"
+          },
+          "product_variant_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Id"
+              }
+            ],
+            "description": "種類ID"
+          },
+          "external_service_product_code": {
+            "type": "string",
+            "description": "連携先コード",
+            "example": "SHOPIFY-PRODUCT-CODE"
+          }
+        }
+      },
+      "EditExternalServiceProductVariant": {
+        "type": "object",
+        "required": [
+          "external_service_product_code"
+        ],
+        "properties": {
+          "external_service_product_code": {
+            "type": "string",
+            "description": "連携先コード",
+            "example": "SHOPIFY-PRODUCT-CODE"
+          }
+        }
+      },
+      "TaxTypeId": {
+        "type": "integer",
+        "format": "double",
+        "description": "消費税率\n- 1: 8.00\n- 2: 10.00",
+        "enum": [
+          1,
+          2
+        ]
+      },
+      "WeightUnitId": {
+        "type": "integer",
+        "description": "重量単位ID\n- 1: g\n- 2: kg",
+        "enum": [
+          1,
+          2
+        ]
+      },
+      "Integer": {
+        "type": "integer",
+        "example": 1
+      },
+      "NullableInteger": {
+        "type": "integer",
+        "example": 1,
+        "nullable": true
+      },
+      "Float": {
+        "type": "number",
+        "format": "float",
+        "example": 10
+      },
+      "Date": {
+        "type": "string",
+        "format": "date",
+        "example": "2019-01-01"
+      },
+      "NullableDate": {
+        "type": "string",
+        "format": "date",
+        "example": "2019-01-01",
+        "nullable": true
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "Error422": {
+        "$ref": "#/components/schemas/ErrorResponse"
+      },
+      "Error404": {
+        "$ref": "#/components/schemas/ErrorResponse"
+      }
+    }
+  }
+}
