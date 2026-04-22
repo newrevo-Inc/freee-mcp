@@ -54,6 +54,7 @@ export interface ApiCallInfo {
 export type ErrorSource =
   | 'api_client'
   | 'sign_client'
+  | 'inventory_client'
   | 'file_upload'
   | 'tool_handler'
   | 'mcp_handler'
