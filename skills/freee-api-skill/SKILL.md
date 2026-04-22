@@ -1,6 +1,6 @@
 ---
 name: freee-api-skill
-description: "freee-mcp / freee-sign-mcp と連携するスキル。会計・人事労務・請求書・工数管理・販売・サイン（電子契約）の詳細APIリファレンスと使い方ガイドを提供。freee の経費申請・取引登録・勤怠打刻・給与明細・見積書・試算表・仕訳・従業員管理・工数登録・売上管理・電子契約の文書管理などの操作やAPI仕様を調べたいときに使う。ユーザーが freee のデータ操作、会計処理、人事労務管理、請求・見積、プロジェクト工数管理、販売管理、電子契約について質問や操作を依頼してきた場合は、明示的に freee と言及していなくても、このスキルの利用を検討すること。サインは別途 freee-sign-mcp の設定が必要。"
+description: "freee-mcp / freee-sign-mcp / freee-inventory-mcp と連携するスキル。会計・人事労務・請求書・工数管理・販売・サイン（電子契約）の詳細APIリファレンスと使い方ガイドを提供。freee の経費申請・取引登録・勤怠打刻・給与明細・見積書・試算表・仕訳・従業員管理・工数登録・売上管理・電子契約の文書管理、および freee 在庫管理（ロジクラ）での商品マスター・拠点・入出荷予定・在庫・仕入先・出荷先の管理について質問や操作を依頼してきた場合は、明示的に freee や ロジクラ と言及していなくても、このスキルの利用を検討すること。サイン・在庫は別途 freee-sign-mcp / freee-inventory-mcp の設定が必要。"
 license: Apache-2.0
 metadata:
   author: freee_jp
@@ -142,6 +142,11 @@ serviceパラメータ (必須):
 
 freee サインは別の MCP サーバー（`freee-sign-mcp`）で提供されます。
 `sign_api_get` 等のサインツールが利用可能な場合は `SIGN-GUIDE.md` を参照してください。
+
+## freee 在庫管理（ロジクラ）
+
+freee 在庫管理（ロジクラ）は別の MCP サーバー（`freee-inventory-mcp`）で提供されます。
+`inventory_api_get` 等の在庫ツールが利用可能な場合は `INVENTORY-GUIDE.md` を参照してください。
 
 ## カラールール
 
