@@ -18,6 +18,7 @@ const PROJECT_ROOT = join(SCRIPT_DIR, "..");
 const OPENAPI_DIR = join(PROJECT_ROOT, "openapi");
 const OUTPUT_DIR = join(PROJECT_ROOT, "skills", "freee-api-skill", "references");
 const SIGN_OUTPUT_DIR = join(PROJECT_ROOT, "skills", "freee-api-skill", "sign-references");
+const INVENTORY_OUTPUT_DIR = join(PROJECT_ROOT, "skills", "freee-api-skill", "inventory-references");
 const MAPPINGS_FILE = join(OPENAPI_DIR, "tag-mappings.json");
 
 // Type definitions
@@ -667,6 +668,7 @@ const API_CONFIGS = [
   { apiKey: "pm-api", schemaFile: join(OPENAPI_DIR, "pm-api-schema.json"), prefix: "pm", outputDir: OUTPUT_DIR },
   { apiKey: "sm-api", schemaFile: join(OPENAPI_DIR, "sm-api-schema.json"), prefix: "sm", outputDir: OUTPUT_DIR },
   { apiKey: "sign-api", schemaFile: join(OPENAPI_DIR, "sign-api-schema.json"), prefix: "sign", outputDir: SIGN_OUTPUT_DIR },
+  { apiKey: "inventory-api", schemaFile: join(OPENAPI_DIR, "inventory-api-schema.json"), prefix: "inventory", outputDir: INVENTORY_OUTPUT_DIR },
 ];
 
 /**

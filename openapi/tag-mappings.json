@@ -96,5 +96,17 @@
     "チーム": "teams",
     "入力項目・検索項目": "items",
     "Kintone": "kintone"
+  },
+  "inventory-api": {
+    "拠点": "warehouses",
+    "商品マスター": "products",
+    "種類": "product-variants",
+    "入荷": "receiving",
+    "出荷": "shipping",
+    "在庫": "stocks",
+    "出荷先": "consignees",
+    "仕入先": "suppliers",
+    "ショップ": "shops",
+    "外部連携": "external-services"
   }
 }
