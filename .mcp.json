@@ -7,6 +7,10 @@
     "freee-sign-mcp": {
       "command": "bun",
       "args": ["run", "src/sign/index.ts"]
+    },
+    "freee-inventory-mcp": {
+      "command": "bun",
+      "args": ["run", "src/inventory/index.ts"]
     }
   }
 }

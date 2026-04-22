@@ -255,6 +255,51 @@ npx --package=freee-mcp -- freee-sign-mcp configure
 - 事業所の切り替え: `freee_set_current_company`
 - company_id を含まない API（例: `/api/1/companies`）はそのまま実行可能
 
+## freee-inventory-mcp
+
+ロジクラ（将来の freee 在庫管理）API を MCP 経由で操作するサーバー。
+
+### 事前準備: ロジクラ OAuth アプリの作成
+
+`https://logikura.com` にログインし、OAuth アプリを新規作成してください。redirect_uri には以下を設定します（MCP のローカルコールバックサーバーが待ち受けるアドレス）:
+
+```
+http://127.0.0.1:54323/callback
+```
+
+発行された `CLIENT_ID` と `CLIENT_SECRET` を、次のセットアップで入力します。
+
+### セットアップ
+
+```bash
+npx --package=freee-mcp -- freee-inventory-mcp configure
+```
+
+初回は対話式で OAuth 認証を行い、`~/.config/freee-mcp/inventory-config.json` と `~/.config/freee-mcp/inventory-tokens.json` に設定を保存します。
+
+### Claude Code 設定例
+
+```json
+{
+  "mcpServers": {
+    "freee-inventory-mcp": {
+      "command": "npx",
+      "args": ["--package=freee-mcp", "--", "freee-inventory-mcp"]
+    }
+  }
+}
+```
+
+### 提供ツール
+
+- `inventory_authenticate` / `inventory_auth_status` / `inventory_clear_auth`
+- `inventory_api_get` / `inventory_api_post` / `inventory_api_put` / `inventory_api_patch` / `inventory_api_delete`
+- `inventory_server_info`
+
+### 注意
+
+現状はロジクラ API (`https://api.logikura.com`) への接続のみ。将来 freee 在庫管理として freee 認証認可基盤に統合される予定です。
+
 ## コントリビューション
 
 詳しくは [CONTRIBUTING.md](./CONTRIBUTING.md) をご覧ください。

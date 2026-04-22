@@ -27,6 +27,7 @@ MCP server that exposes freee API endpoints as MCP tools:
   - `pm-api-schema.json` - 工数管理API (https://api.freee.co.jp/pm)
   - `sm-api-schema.json` - 販売API (https://api.freee.co.jp/sm)
   - `sign-api-schema.json` - サイン（電子契約）API (https://ninja-sign.com)
+  - `inventory-api-schema.json` - ロジクラ（freee 在庫管理）API (https://api.logikura.com)
 - Schema Loader: `src/openapi/schema-loader.ts` loads and manages all API schemas
 - Tool Generation: `generateClientModeTool()` in `src/openapi/client-mode.ts` creates method-specific tools
   - Tools: `freee_api_get`, `freee_api_post`, `freee_api_put`, `freee_api_delete`, `freee_api_patch`, `freee_api_list_paths`
@@ -48,6 +49,8 @@ Run `freee-mcp configure` to set up configuration interactively:
 - `freee-mcp configure` - Interactive configuration setup
 - `freee-sign-mcp` - Start Sign MCP server
 - `freee-sign-mcp configure` - Sign interactive configuration setup
+- `freee-inventory-mcp` - Start Inventory (Logikura) MCP server
+- `freee-inventory-mcp configure` - Inventory interactive configuration setup
 
 ### MCP Configuration
 
@@ -81,6 +84,8 @@ Sign development mode: Use `"command": "bun", "args": ["run", "src/sign/index.ts
 - `FREEE_API_BASE_URL_PM` - 工数管理API
 - `FREEE_API_BASE_URL_SM` - 販売API
 - `FREEE_SIGN_API_URL` - サインAPI（`src/sign/config.ts` で処理）
+- `FREEE_INVENTORY_API_URL` - ロジクラ API
+- `FREEE_INVENTORY_OAUTH_HOST` - ロジクラ OAuth ホスト（`src/inventory/config.ts` で処理）
 
 ### Remote モードのロギング (canonical log line)
 
