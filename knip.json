@@ -1,6 +1,12 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["src/cli.ts", "scripts/*.ts"],
+  "entry": [
+    "src/cli.ts",
+    "scripts/*.ts",
+    "src/sign/index.ts",
+    "src/sign/entry-remote.ts",
+    "src/inventory/index.ts"
+  ],
   "project": ["src/**/*.ts", "scripts/**/*.ts"],
   "ignoreDependencies": ["@types/crypto-js"]
 }
