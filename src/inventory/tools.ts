@@ -17,8 +17,8 @@ function addInventoryAuthTools(server: McpServer): void {
   server.registerTool(
     'inventory_authenticate',
     {
-      title: 'ロジクラ OAuth認証',
-      description: 'ロジクラ（freee 在庫管理）OAuth認証を開始（初回のみ必要）',
+      title: 'freee 在庫管理 OAuth認証',
+      description: 'freee 在庫管理 OAuth認証を開始（初回のみ必要）',
       annotations: { destructiveHint: false },
     },
     async () => {
@@ -57,8 +57,8 @@ function addInventoryAuthTools(server: McpServer): void {
   server.registerTool(
     'inventory_auth_status',
     {
-      title: 'ロジクラ 認証状態',
-      description: 'ロジクラの認証状態を確認',
+      title: 'freee 在庫管理 認証状態',
+      description: 'freee 在庫管理の認証状態を確認',
       annotations: { readOnlyHint: true },
     },
     async () => {
@@ -85,13 +85,13 @@ function addInventoryAuthTools(server: McpServer): void {
   server.registerTool(
     'inventory_clear_auth',
     {
-      title: 'ロジクラ 認証クリア',
-      description: 'ロジクラの認証情報をクリア',
+      title: 'freee 在庫管理 認証クリア',
+      description: 'freee 在庫管理の認証情報をクリア',
       annotations: { destructiveHint: true },
     },
     async () => {
       return clearInventoryTokens()
-        .then(() => createTextResponse('ロジクラの認証情報をクリアしました。'))
+        .then(() => createTextResponse('freee 在庫管理の認証情報をクリアしました。'))
         .catch((error) =>
           createTextResponse(`認証情報のクリアに失敗: ${formatErrorMessage(error)}`),
         );
@@ -101,11 +101,11 @@ function addInventoryAuthTools(server: McpServer): void {
 
 export function addInventoryApiTools(server: McpServer): void {
   const methods = [
-    { name: 'inventory_api_get', method: 'GET', desc: 'ロジクラ API GET' },
-    { name: 'inventory_api_post', method: 'POST', desc: 'ロジクラ API POST' },
-    { name: 'inventory_api_put', method: 'PUT', desc: 'ロジクラ API PUT' },
-    { name: 'inventory_api_patch', method: 'PATCH', desc: 'ロジクラ API PATCH' },
-    { name: 'inventory_api_delete', method: 'DELETE', desc: 'ロジクラ API DELETE' },
+    { name: 'inventory_api_get', method: 'GET', desc: 'freee 在庫管理 API GET' },
+    { name: 'inventory_api_post', method: 'POST', desc: 'freee 在庫管理 API POST' },
+    { name: 'inventory_api_put', method: 'PUT', desc: 'freee 在庫管理 API PUT' },
+    { name: 'inventory_api_patch', method: 'PATCH', desc: 'freee 在庫管理 API PATCH' },
+    { name: 'inventory_api_delete', method: 'DELETE', desc: 'freee 在庫管理 API DELETE' },
   ] as const;
 
   for (const { name, method, desc } of methods) {
@@ -159,7 +159,7 @@ export function addInventoryAuthenticationTools(server: McpServer): void {
   server.registerTool(
     'inventory_server_info',
     {
-      title: 'ロジクラ サーバー情報',
+      title: 'freee 在庫管理 サーバー情報',
       description: 'freee-inventory-mcp サーバーの情報を取得',
       annotations: { readOnlyHint: true, openWorldHint: false },
     },
