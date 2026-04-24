@@ -30,6 +30,9 @@ function addInventoryAuthTools(server: McpServer): void {
           const authUrl = buildInventoryAuthUrl(state, redirectUri, clientId);
 
           const authManager = getDefaultAuthManager();
+          // fire-and-forget: MCP ツール応答は authUrl を返した時点で完了するため、
+          // ここでのトークン交換失敗は inventory-tokens.json 不在（= inventory_auth_status で「未認証」表示）
+          // としてのみユーザーに伝わる。失敗詳細は stderr（console.error）で観測可能
           authManager.registerCliAuthHandler(state, {
             resolve: (code: string): void => {
               exchangeInventoryCodeForTokens(code, redirectUri)

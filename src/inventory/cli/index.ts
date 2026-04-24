@@ -23,6 +23,8 @@ interface InventoryConfigureOptions {
 
 async function resetExistingConfig(): Promise<void> {
   console.log('保存済みのログイン情報をリセットしています...');
+  // 動的 import: --force 指定時のみ通る低頻度パスのため、
+  // サーバー起動（configure 以外）では tokens.js の初期化コストを払わない
   const { clearInventoryTokens } = await import('../tokens.js');
   await clearInventoryTokens();
   await clearInventoryConfig();

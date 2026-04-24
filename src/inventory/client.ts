@@ -113,7 +113,8 @@ export async function makeInventoryApiRequest(
     );
   }
 
-  // 429 (HTTP 標準) も 499 (ロジクラ OpenAPI 仕様記載) も同じレートリミット応答として扱う
+  // レートリミット応答: OpenAPI 仕様 (openapi/inventory-api-schema.json) では 499 記載、
+  // 実 Rails 実装 (logikura の external_api_base_controller.rb) は 429 を返すため両対応
   if (response.status === 429 || response.status === 499) {
     const reset =
       response.headers.get('X-Rate-Limit-Reset') ||

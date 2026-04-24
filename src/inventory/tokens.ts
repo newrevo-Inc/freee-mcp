@@ -36,6 +36,7 @@ export async function loadInventoryTokens(): Promise<TokenData | null> {
       const parsed = JSON.parse(data);
       const result = InventoryTokenDataSchema.safeParse(parsed);
       if (!result.success) {
+        // スキーマ不正時も throw せず null を返し、呼び出し側で再認証へ誘導する（L46 の catch と同一方針）
         console.error('[error] Invalid inventory token file:', result.error.message);
         return null;
       }
