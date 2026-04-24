@@ -16,10 +16,10 @@ export async function collectInventoryCredentials(): Promise<InventoryCredential
     console.log('  変更しない項目はそのまま Enter を押してください。\n');
   }
 
-  console.log('ステップ 1/2: ロジクラ OAuth認証情報の入力\n');
+  console.log('ステップ 1/2: freee 在庫管理 OAuth認証情報の入力\n');
   const defaultPort = existing.callbackPort || INVENTORY_DEFAULT_CALLBACK_PORT;
   console.log(
-    `ロジクラアプリのコールバックURLには http://127.0.0.1:${defaultPort}/callback を設定してください。\n`,
+    `OAuth アプリのコールバックURLには http://127.0.0.1:${defaultPort}/callback を設定してください。\n`,
   );
 
   const result = await prompts([

@@ -122,7 +122,7 @@ async function configureInventoryMcp(): Promise<void> {
   await configureInventoryMcpTarget('claude-desktop');
   console.log('');
   console.log('=== Skill (API リファレンス) の更新 ===\n');
-  console.log('ロジクラ API リファレンスを利用するには、スキルを最新版に更新してください:\n');
+  console.log('freee 在庫管理 API リファレンスを利用するには、スキルを最新版に更新してください:\n');
   console.log('  npx skills add freee/freee-mcp\n');
 }
 
@@ -131,8 +131,8 @@ export async function inventoryConfigure(options: InventoryConfigureOptions = {}
 
   if (options.force) await resetExistingConfig();
 
-  console.log('このウィザードでは、ロジクラ（freee 在庫管理）の設定と認証を対話式で行います。');
-  console.log('ロジクラ OAuth認証情報が必要です。\n');
+  console.log('このウィザードでは、freee 在庫管理の設定と認証を対話式で行います。');
+  console.log('freee 在庫管理の OAuth認証情報が必要です。\n');
 
   const credentials = await collectInventoryCredentials();
   console.log('\n認証情報を受け取りました。\n');
