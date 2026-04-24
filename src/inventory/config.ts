@@ -23,7 +23,7 @@ export const INVENTORY_API_PATH_REGEX = /^\/api\/v\d+\//;
 export const INVENTORY_PATH_TRAVERSAL_REGEX = /(\.\.|%2e%2e)/i;
 
 export const INVENTORY_SERVER_INSTRUCTIONS =
-  'ロジクラ（freee 在庫管理）APIと連携するMCPサーバー。商品マスター・拠点・入出荷・在庫・仕入先・出荷先の管理をサポート。';
+  'freee 在庫管理 APIと連携するMCPサーバー。商品マスター・拠点・入出荷・在庫・仕入先・出荷先の管理をサポート。';
 
 const InventoryConfigSchema = z.object({
   clientId: z.string().optional(),

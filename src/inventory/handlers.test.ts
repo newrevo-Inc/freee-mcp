@@ -4,7 +4,7 @@ import { createInventoryMcpServer } from './handlers.js';
 import { addInventoryAuthenticationTools } from './tools.js';
 
 vi.mock('./config.js', () => ({
-  INVENTORY_SERVER_INSTRUCTIONS: 'ロジクラ（freee 在庫管理）APIと連携するMCPサーバー。',
+  INVENTORY_SERVER_INSTRUCTIONS: 'freee 在庫管理 APIと連携するMCPサーバー。',
   INVENTORY_API_URL: 'https://api.logikura.com',
   INVENTORY_AUTHORIZATION_ENDPOINT: 'https://logikura.com/oauth/authorize',
   INVENTORY_TOKEN_ENDPOINT: 'https://logikura.com/oauth/token',
@@ -39,9 +39,9 @@ describe('inventory/handlers', () => {
     expect(server).toBeDefined();
   });
 
-  it('INVENTORY_SERVER_INSTRUCTIONS がロジクラ固有の説明文', async () => {
+  it('INVENTORY_SERVER_INSTRUCTIONS が在庫管理ドメイン固有の説明文', async () => {
     const { INVENTORY_SERVER_INSTRUCTIONS } = await import('./config.js');
-    expect(INVENTORY_SERVER_INSTRUCTIONS).toMatch(/ロジクラ|在庫/);
+    expect(INVENTORY_SERVER_INSTRUCTIONS).toContain('在庫');
     expect(INVENTORY_SERVER_INSTRUCTIONS).not.toContain('会計');
   });
 
