@@ -261,16 +261,6 @@ freee 在庫管理の API は専用コマンド `freee-inventory-mcp` で利用�
 
 > Remote MCP での提供は現在準備中です。ローカルでの MCP サーバー起動のみサポートしています。
 
-### 事前準備: OAuth アプリの作成
-
-`https://logikura.com` にログインし、OAuth アプリを新規作成します。redirect_uri には以下を設定してください:
-
-```
-http://127.0.0.1:54323/callback
-```
-
-発行された `CLIENT_ID` と `CLIENT_SECRET` を、次のセットアップで入力します。
-
 ### セットアップ
 
 ```bash
