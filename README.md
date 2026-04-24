@@ -255,13 +255,15 @@ npx --package=freee-mcp -- freee-sign-mcp configure
 - 事業所の切り替え: `freee_set_current_company`
 - company_id を含まない API（例: `/api/1/companies`）はそのまま実行可能
 
-## freee-inventory-mcp
+## freee 在庫管理
 
-ロジクラ（将来の freee 在庫管理）API を MCP 経由で操作するサーバー。
+freee 在庫管理の API は専用コマンド `freee-inventory-mcp` で利用できます。
 
-### 事前準備: ロジクラ OAuth アプリの作成
+> Remote MCP での提供は現在準備中です。ローカルでの MCP サーバー起動のみサポートしています。
 
-`https://logikura.com` にログインし、OAuth アプリを新規作成してください。redirect_uri には以下を設定します（MCP のローカルコールバックサーバーが待ち受けるアドレス）:
+### 事前準備: OAuth アプリの作成
+
+`https://logikura.com` にログインし、OAuth アプリを新規作成します。redirect_uri には以下を設定してください:
 
 ```
 http://127.0.0.1:54323/callback
@@ -275,9 +277,9 @@ http://127.0.0.1:54323/callback
 npx --package=freee-mcp -- freee-inventory-mcp configure
 ```
 
-初回は対話式で OAuth 認証を行い、`~/.config/freee-mcp/inventory-config.json` と `~/.config/freee-mcp/inventory-tokens.json` に設定を保存します。
+対話式ウィザードが認証情報の設定と OAuth 認証を行います。
 
-### Claude Code 設定例
+### MCP 設定
 
 ```json
 {
@@ -290,15 +292,18 @@ npx --package=freee-mcp -- freee-inventory-mcp configure
 }
 ```
 
-### 提供ツール
+### 在庫管理用ツール
 
-- `inventory_authenticate` / `inventory_auth_status` / `inventory_clear_auth`
-- `inventory_api_get` / `inventory_api_post` / `inventory_api_put` / `inventory_api_patch` / `inventory_api_delete`
-- `inventory_server_info`
-
-### 注意
-
-現状はロジクラ API (`https://api.logikura.com`) への接続のみ。将来 freee 在庫管理として freee 認証認可基盤に統合される予定です。
+| ツール | 説明 |
+| --- | --- |
+| `inventory_authenticate` | OAuth 認証を実行 |
+| `inventory_auth_status` | 認証状態を確認 |
+| `inventory_clear_auth` | 認証情報をクリア |
+| `inventory_api_get` | データ取得 |
+| `inventory_api_post` | 新規作成 |
+| `inventory_api_put` | 更新 |
+| `inventory_api_patch` | 部分更新 |
+| `inventory_api_delete` | 削除 |
 
 ## コントリビューション
 
