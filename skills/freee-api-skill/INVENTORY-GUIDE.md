@@ -33,7 +33,7 @@ inventory_api_get { path: "/api/v1/stocks/1", query: { warehouse_id: 10 } }
 ### 出荷予定を確定
 
 ```
-inventory_api_post { path: "/api/v1/shipping_schedules/123/ship" }
+inventory_api_put { path: "/api/v1/shipping_schedules/123/ship" }
 ```
 
 ## 詳細リファレンス
