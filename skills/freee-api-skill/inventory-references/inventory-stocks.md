@@ -21,8 +21,8 @@
 OK
 
 - stock (必須): object
-  - id (必須): object - 在庫ID
-  - inventory_id (必須): object - インベントリID
+  - id (必須): integer(integer) - 在庫ID 例: `1` (最小: 1)
+  - inventory_id (必須): integer(integer) - インベントリID 例: `1` (最小: 1)
   - lot_code (必須): string - ロット番号 例: `LOT001`
   - expiration_date (必須): string(date) - 有効期限 例: `2025-12-31`
   - quantity (必須): integer - 在庫数 例: `1000` (最小: 0)
@@ -32,6 +32,12 @@ OK
 操作: 在庫一覧
 
 説明: 在庫一覧
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+| warehouse_id | query | いいえ | integer | 指定した倉庫の在庫のみが返されます |
 
 ### レスポンス (200)
 

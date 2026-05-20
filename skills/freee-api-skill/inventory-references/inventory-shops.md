@@ -21,8 +21,8 @@ OK
     - id (必須): integer(integer) 例: `1` (最小: 1)
     - name (必須): string - ショップ名 例: `ロジクラショップ`
     - code (必須): string - ショップコード 例: `LOGIKURA-SHOP`
-    - sales_channel_id (必須): object - 販売チャネルID(モール/カート)
-    - delivery_method_id (必須): object - 配送方法ID
+    - sales_channel_id (必須): integer(integer) - 販売チャネルID(モール/カート) 例: `1` (最小: 1)
+    - delivery_method_id (必須): integer(integer) - 配送方法ID 例: `1` (最小: 1)
     - email (必須): string - メールアドレス 例: `test@example.com`
     - phone_number (必須): string - 電話番号 例: `03-6362-4084`
     - address1 (必須): string - 住所1 例: `東京都港区`
@@ -45,8 +45,8 @@ false: 税抜
 - shop (必須): object
   - name (必須): string - ショップ名 例: `ロジクラショップ`
   - code (必須): string - ショップコード 例: `LOGIKURA-SHOP`
-  - sales_channel_id (必須): object - 販売チャネルID(モール/カート)
-  - delivery_method_id (必須): object - 配送方法ID
+  - sales_channel_id (必須): integer(integer) - 販売チャネルID(モール/カート) 例: `1` (最小: 1)
+  - delivery_method_id (必須): integer(integer) - 配送方法ID 例: `1` (最小: 1)
   - email (必須): string - メールアドレス 例: `test@example.com`
   - phone_number (必須): string - 電話番号 例: `03-6362-4084`
   - address1 (必須): string - 住所1 例: `東京都港区`
@@ -65,8 +65,8 @@ false: 税抜
   - id (必須): integer(integer) 例: `1` (最小: 1)
   - name (必須): string - ショップ名 例: `ロジクラショップ`
   - code (必須): string - ショップコード 例: `LOGIKURA-SHOP`
-  - sales_channel_id (必須): object - 販売チャネルID(モール/カート)
-  - delivery_method_id (必須): object - 配送方法ID
+  - sales_channel_id (必須): integer(integer) - 販売チャネルID(モール/カート) 例: `1` (最小: 1)
+  - delivery_method_id (必須): integer(integer) - 配送方法ID 例: `1` (最小: 1)
   - email (必須): string - メールアドレス 例: `test@example.com`
   - phone_number (必須): string - 電話番号 例: `03-6362-4084`
   - address1 (必須): string - 住所1 例: `東京都港区`

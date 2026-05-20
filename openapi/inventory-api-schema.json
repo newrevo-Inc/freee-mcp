@@ -3,7 +3,7 @@
   "info": {
     "title": "ロジクラ API",
     "version": "1.0",
-    "description": "ロジクラで管理しているデータを外部から利用するためのAPIです。\n# 概要\n\n## リクエスト制限\nロジクラAPIでは1分あたり100回のリクエスト制限を設けています。\nリクエスト制限に関する情報はヘッダに含まれています。\n\n|ヘッダ名|説明|\n|---|---|\n|X-RateLimit-Limit|1分あたりのリクエスト数|\n|X-RateLimit-Remaining|リクエスト可能数|\n|X-Rate-Limit-Reset|リクエスト数がリセットされるまでの秒数|\n\n## エラーレスポンス\n|HTTPステータスコード|種類|原因|\n|---|---|---|\n|401|Unauthorized|アクセストークンが不正|\n|404|Not Found|リソースが存在しません|\n|422|Unprocessable Entity|不正なパラメーター|\n|499|Too Many Requests|リクエスト制限の上限を超えました|\n\n## ページネーション\nリストを返すAPIに関しては応答にLinkヘッダーを追加します。\n```\n<https://api.logikura.com/api/v1/path/to?page=1>; rel=\"prev\",\n<https://api.logikura.com/api/v1/path/to?page=3>; rel=\"next\"\n```\n",
+    "description": "ロジクラで管理しているデータを外部から利用するためのAPIです。\n# 概要\n\n## 認証\n\nロジクラ API は OAuth 2.0 の認可コードフローを使用します。\n\n### アプリケーションの登録\n\nAPI を利用するには、<a href=\"https://logikura.com/oauth/applications\" target=\"_blank\">https://logikura.com/oauth/applications</a> にアクセスしてアプリケーションを登録し、クライアント ID とクライアントシークレットを取得してください。\n\n登録時に、アプリケーションが必要とするスコープを選択してください。\n\n| スコープ | 説明 |\n|---|---|\n| `read` | データの読み取り |\n| `write` | データの作成・更新 |\n\n### 認可コードフロー\n\n#### 1. 認可コードの取得\n\n以下の URL にリダイレクトすると、ロジクラのアクセス許可画面が表示されます。ユーザーが承認すると、認可コードが発行されます。\n\n```\nhttps://logikura.com/oauth/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope={SCOPE}\n```\n\n| パラメーター | 説明 |\n|---|---|\n| `response_type` | `code` を指定 |\n| `client_id` | アプリケーション登録時に取得したクライアント ID |\n| `redirect_uri` | アプリケーション登録時に設定したリダイレクト URI |\n| `scope` | アプリケーション登録時に指定したスコープを `+` 区切りで指定（例: `read+write`） |\n\nユーザーが承認すると、指定したリダイレクト URI に認可コードが付与されてリダイレクトされます。認可コードの有効期限は **10 分** です。\n\n```\n{REDIRECT_URI}?code={AUTHORIZATION_CODE}\n```\n\n#### 2. アクセストークンの取得\n\n取得した認可コードを使ってアクセストークンとリフレッシュトークンを発行します。\n\n```bash\ncurl --request POST 'https://logikura.com/oauth/token' \\\n  --header 'Content-Type: application/x-www-form-urlencoded' \\\n  --data 'grant_type=authorization_code&code={AUTHORIZATION_CODE}&client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}&redirect_uri={REDIRECT_URI}'\n```\n\nレスポンス例:\n\n```json\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 86400,\n  \"refresh_token\": \"...\",\n  \"scope\": \"read write\",\n  \"created_at\": 1234567890\n}\n```\n\n#### 3. API リクエスト\n\n取得したアクセストークンを `Authorization` ヘッダーに指定してリクエストを送信します。\n\n```\nAuthorization: Bearer {ACCESS_TOKEN}\n```\n\n例:\n\n```bash\ncurl --request GET 'https://api.logikura.com/api/v1/warehouses' \\\n  --header 'Authorization: Bearer {ACCESS_TOKEN}'\n```\n\n### トークンの更新\n\nアクセストークンの有効期限が切れた場合、リフレッシュトークンを使って新しいアクセストークンを取得できます。\n\n```bash\ncurl --request POST 'https://logikura.com/oauth/token' \\\n  --header 'Content-Type: application/x-www-form-urlencoded' \\\n  --data 'grant_type=refresh_token&refresh_token={REFRESH_TOKEN}&client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}'\n```\n\nリフレッシュトークンには **90 日間の有効期限** があります。有効期限が切れた場合は、**1. 認可コードの取得** から再度実行してアクセストークンを再発行してください。\n\n## リクエスト制限\nロジクラAPIでは1分あたり100回のリクエスト制限を設けています。\nリクエスト制限に関する情報はヘッダに含まれています。\n\n|ヘッダ名|説明|\n|---|---|\n|X-RateLimit-Limit|1分あたりのリクエスト数|\n|X-RateLimit-Remaining|リクエスト可能数|\n|X-Rate-Limit-Reset|リクエスト数がリセットされるまでの秒数|\n\n## エラーレスポンス\n|HTTPステータスコード|種類|原因|\n|---|---|---|\n|401|Unauthorized|アクセストークンが不正|\n|404|Not Found|リソースが存在しません|\n|422|Unprocessable Entity|不正なパラメーター|\n|499|Too Many Requests|リクエスト制限の上限を超えました|\n\n## ページネーション\nリストを返すAPIに関しては応答にLinkヘッダーを追加します。\n```\n<https://api.logikura.com/api/v1/path/to?page=1>; rel=\"prev\",\n<https://api.logikura.com/api/v1/path/to?page=3>; rel=\"next\"\n```\n",
     "contact": {}
   },
   "servers": [
@@ -1498,6 +1498,18 @@
         "summary": "在庫一覧",
         "tags": [
           "在庫"
+        ],
+        "parameters": [
+          {
+            "name": "warehouse_id",
+            "in": "query",
+            "required": false,
+            "description": "指定した倉庫の在庫のみが返されます",
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -3755,7 +3767,7 @@
           "external_service_code": {
             "type": "string",
             "example": "A-12345",
-            "description": "外部連携コード",
+            "description": "外部サービスコード",
             "nullable": true
           },
           "external_service_account": {

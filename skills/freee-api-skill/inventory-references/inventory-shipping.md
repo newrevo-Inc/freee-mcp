@@ -30,7 +30,7 @@ OK
   - billing_address_id (任意): integer(integer) 例: `1` (最小: 1)
   - shop_id (必須): integer(integer) 例: `1` (最小: 1)
   - order_number (必須): string - 注文番号 例: `A-123456`
-  - order_date (必須): object - 注文日
+  - order_date (必須): string(date) - 注文日 例: `2019-01-01`
   - shipping_cost (必須): integer - 送料 例: `100`
   - sales_commission (必須): integer - 販売手数料 例: `100`
   - other_cost (必須): integer - その他費用 例: `100`
@@ -38,7 +38,7 @@ OK
   - total_price (必須): integer - 総計 例: `100`
   - gift_message (必須): string - ギフトメッセージ 例: `おめでとうございます`
   - gift_enabled (任意): boolean - ギフトフラグ 例: `true`
-  - external_service_code (任意): string - 外部連携コード 例: `A-12345`
+  - external_service_code (任意): string - 外部サービスコード 例: `A-12345`
   - external_service_account (任意): object
 - shipping_schedule (必須): object
 
@@ -114,7 +114,7 @@ OK
   - billing_address_id (任意): integer(integer) 例: `1` (最小: 1)
   - shop_id (必須): integer(integer) 例: `1` (最小: 1)
   - order_number (必須): string - 注文番号 例: `A-123456`
-  - order_date (必須): object - 注文日
+  - order_date (必須): string(date) - 注文日 例: `2019-01-01`
   - shipping_cost (必須): integer - 送料 例: `100`
   - sales_commission (必須): integer - 販売手数料 例: `100`
   - other_cost (必須): integer - その他費用 例: `100`
@@ -122,7 +122,7 @@ OK
   - total_price (必須): integer - 総計 例: `100`
   - gift_message (必須): string - ギフトメッセージ 例: `おめでとうございます`
   - gift_enabled (任意): boolean - ギフトフラグ 例: `true`
-  - external_service_code (任意): string - 外部連携コード 例: `A-12345`
+  - external_service_code (任意): string - 外部サービスコード 例: `A-12345`
   - external_service_account (任意): object
 - shipping_schedule (必須): object
 
@@ -193,7 +193,7 @@ OK
   - billing_address_id (任意): integer(integer) 例: `1` (最小: 1)
   - shop_id (必須): integer(integer) 例: `1` (最小: 1)
   - order_number (必須): string - 注文番号 例: `A-123456`
-  - order_date (必須): object - 注文日
+  - order_date (必須): string(date) - 注文日 例: `2019-01-01`
   - shipping_cost (必須): integer - 送料 例: `100`
   - sales_commission (必須): integer - 販売手数料 例: `100`
   - other_cost (必須): integer - その他費用 例: `100`
@@ -201,14 +201,14 @@ OK
   - total_price (必須): integer - 総計 例: `100`
   - gift_message (必須): string - ギフトメッセージ 例: `おめでとうございます`
   - gift_enabled (任意): boolean - ギフトフラグ 例: `true`
-  - external_service_code (任意): string - 外部連携コード 例: `A-12345`
+  - external_service_code (任意): string - 外部サービスコード 例: `A-12345`
   - external_service_account (任意): object
 - shipping_history (必須): object
   - shipping_items (必須): array[object]
-  - warehouse_id (必須): object - 拠点ID
-  - consignee_id (必須): object - 出荷先ID
+  - warehouse_id (必須): integer(integer) - 拠点ID 例: `1` (最小: 1)
+  - consignee_id (必須): integer(integer) - 出荷先ID 例: `1` (最小: 1)
   - tracking_number (任意): string - 追跡番号 例: `1234-5678-9012`
-  - shipped_date (任意): object - 出荷実績日
+  - shipped_date (任意): string(date) - 出荷実績日 例: `2019-01-01`
   - description (任意): string - 詳細 例: `メモです`
 
 ### レスポンス (200)

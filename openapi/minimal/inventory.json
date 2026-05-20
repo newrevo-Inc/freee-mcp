@@ -310,7 +310,16 @@
     "/api/v1/inventories": {
       "get": {
         "summary": "在庫一覧",
-        "description": "在庫一覧"
+        "description": "在庫一覧",
+        "parameters": [
+          {
+            "name": "warehouse_id",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "指定した倉庫の在庫のみが返されます"
+          }
+        ]
       },
       "post": {
         "summary": "在庫作成",

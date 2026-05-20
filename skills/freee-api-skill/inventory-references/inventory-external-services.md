@@ -32,8 +32,8 @@ OK
 
 (必須)
 
-- external_service_account_id (必須): object - 外部連携アカウントID
-- product_variant_id (必須): object - 種類ID
+- external_service_account_id (必須): integer(integer) - 外部連携アカウントID 例: `1` (最小: 1)
+- product_variant_id (必須): integer(integer) - 種類ID 例: `1` (最小: 1)
 - external_service_product_code (必須): string - 連携先コード 例: `SHOPIFY-PRODUCT-CODE`
 
 ### レスポンス (200)
@@ -41,9 +41,9 @@ OK
 外部連携紐付け
 
 - external_service_product_variant (必須): object
-  - id (必須): object - 外部連携紐付けID
-  - external_service_account_id (必須): object - 外部連携アカウントID
-  - product_variant_id (必須): object - 種類ID
+  - id (必須): integer(integer) - 外部連携紐付けID 例: `1` (最小: 1)
+  - external_service_account_id (必須): integer(integer) - 外部連携アカウントID 例: `1` (最小: 1)
+  - product_variant_id (必須): integer(integer) - 種類ID 例: `1` (最小: 1)
   - external_service_product_code (必須): string - 連携先コード 例: `SHOPIFY-PRODUCT-CODE`
 
 ### PUT /api/v1/external_service_product_variants/{id}
@@ -67,9 +67,9 @@ OK
 外部連携紐付け
 
 - external_service_product_variant (必須): object
-  - id (必須): object - 外部連携紐付けID
-  - external_service_account_id (必須): object - 外部連携アカウントID
-  - product_variant_id (必須): object - 種類ID
+  - id (必須): integer(integer) - 外部連携紐付けID 例: `1` (最小: 1)
+  - external_service_account_id (必須): integer(integer) - 外部連携アカウントID 例: `1` (最小: 1)
+  - product_variant_id (必須): integer(integer) - 種類ID 例: `1` (最小: 1)
   - external_service_product_code (必須): string - 連携先コード 例: `SHOPIFY-PRODUCT-CODE`
 
 ### DELETE /api/v1/external_service_product_variants/{id}
@@ -87,9 +87,9 @@ OK
 削除した外部連携紐付け
 
 - external_service_product_variant (必須): object
-  - id (必須): object - 外部連携紐付けID
-  - external_service_account_id (必須): object - 外部連携アカウントID
-  - product_variant_id (必須): object - 種類ID
+  - id (必須): integer(integer) - 外部連携紐付けID 例: `1` (最小: 1)
+  - external_service_account_id (必須): integer(integer) - 外部連携アカウントID 例: `1` (最小: 1)
+  - product_variant_id (必須): integer(integer) - 種類ID 例: `1` (最小: 1)
   - external_service_product_code (必須): string - 連携先コード 例: `SHOPIFY-PRODUCT-CODE`
 
 
