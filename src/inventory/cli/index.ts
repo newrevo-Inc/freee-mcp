@@ -71,7 +71,6 @@ async function performInventoryOAuthFlow(credentials: InventoryCredentials): Pro
         clearTimeout(timeout);
         reject(error);
       },
-      codeVerifier: '',
     });
   });
 

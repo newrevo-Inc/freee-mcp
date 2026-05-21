@@ -44,7 +44,6 @@ function addInventoryAuthTools(server: McpServer): void {
               console.error('Inventory authentication failed:', error);
               authManager.removeCliAuthHandler(state);
             },
-            codeVerifier: '',
           });
           return createTextResponse(
             `認証URL: ${authUrl}\n\nブラウザで開いて認証してください。5分でタイムアウトします。`,
