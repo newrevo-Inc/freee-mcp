@@ -1,9 +1,8 @@
 #!/usr/bin/env bun
 
 /**
- * Fetch OpenAPI schemas from freee API official repositories
- * Downloads JSON/YAML schemas and saves them as JSON in the openapi directory
- * Also generates minimized schemas for reduced memory consumption
+ * Fetch the inventory (ロジクラ) OpenAPI schema and store it under openapi/.
+ * Also generates a minimized version for reduced memory consumption.
  */
 
 import { join, dirname } from "path";
@@ -143,42 +142,6 @@ function minimizeSchema(schema: OpenAPISchema): MinimalSchema {
 // Schema sources
 const SCHEMA_SOURCES = [
   {
-    name: "accounting-api",
-    url: "https://raw.githubusercontent.com/freee/freee-api-schema/master/v2020_06_15/open-api-3/api-schema.json",
-    outputFile: "accounting-api-schema.json",
-    minimalFile: "accounting.json",
-  },
-  {
-    name: "hr-api",
-    url: "https://raw.githubusercontent.com/freee/freee-api-schema/master/hr/open-api-3/api-schema.json",
-    outputFile: "hr-api-schema.json",
-    minimalFile: "hr.json",
-  },
-  {
-    name: "invoice-api",
-    url: "https://raw.githubusercontent.com/freee/freee-api-schema/master/iv/open-api-3/api-schema.yml",
-    outputFile: "invoice-api-schema.json",
-    minimalFile: "invoice.json",
-  },
-  {
-    name: "pm-api",
-    url: "https://pm.secure.freee.co.jp/api_docs/swagger.yml",
-    outputFile: "pm-api-schema.json",
-    minimalFile: "pm.json",
-  },
-  {
-    name: "sm-api",
-    url: "https://raw.githubusercontent.com/freee/freee-api-schema/master/sm/open-api-3/api-schema.yml",
-    outputFile: "sm-api-schema.json",
-    minimalFile: "sm.json",
-  },
-  {
-    name: "sign-api",
-    url: "https://ninja-sign.com/v1/openapi.yaml",
-    outputFile: "sign-api-schema.json",
-    minimalFile: "sign.json",
-  },
-  {
     name: "inventory-api",
     url: "https://logikura.dev/api/logikura.v1.yaml",
     outputFile: "inventory-api-schema.json",
@@ -246,7 +209,7 @@ async function fetchSchema(source: {
  * Main execution
  */
 async function main(): Promise<void> {
-  console.log("Fetching OpenAPI schemas from freee API...");
+  console.log("Fetching the inventory OpenAPI schema...");
   console.log("==========================================");
   console.log("");
 

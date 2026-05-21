@@ -45,4 +45,4 @@ inventory_api_put { path: "/api/v1/shipping_schedules/123/ship" }
 - レスポンスのページネーションは `Link` ヘッダーで提供される（MCP ツールはペイロードをそのまま返すのでクライアント側で Link を解釈）
 - 401 が返ったら `inventory_authenticate` を再実行すると refresh が試みられる
 - 429 / 499 が返ったら `X-Rate-Limit-Reset` 秒後に再試行（OpenAPI 仕様は 499、実装は 429 で返る場合がある）
-- 在庫 API の「商品マスター」は販売 API (sm) の「商品」とは別物。販売・売上管理は `freee_api_*` ツール、在庫・入出荷は `inventory_api_*` ツールを使う
+- 在庫 API の「商品マスター」はロジクラ独自の商品定義であり、freee 会計や freee 販売の「商品」とは別物。混同しないこと
