@@ -16,8 +16,6 @@ const __dirname = dirname(__filename);
 const SCRIPT_DIR = __dirname;
 const PROJECT_ROOT = join(SCRIPT_DIR, "..");
 const OPENAPI_DIR = join(PROJECT_ROOT, "openapi");
-const OUTPUT_DIR = join(PROJECT_ROOT, "skills", "freee-api-skill", "references");
-const SIGN_OUTPUT_DIR = join(PROJECT_ROOT, "skills", "freee-api-skill", "sign-references");
 const INVENTORY_OUTPUT_DIR = join(PROJECT_ROOT, "skills", "freee-api-skill", "inventory-references");
 const MAPPINGS_FILE = join(OPENAPI_DIR, "tag-mappings.json");
 
@@ -662,12 +660,6 @@ async function processApi(
 
 // API configurations
 const API_CONFIGS = [
-  { apiKey: "accounting-api", schemaFile: join(OPENAPI_DIR, "accounting-api-schema.json"), prefix: "accounting", outputDir: OUTPUT_DIR },
-  { apiKey: "hr-api", schemaFile: join(OPENAPI_DIR, "hr-api-schema.json"), prefix: "hr", outputDir: OUTPUT_DIR },
-  { apiKey: "invoice-api", schemaFile: join(OPENAPI_DIR, "invoice-api-schema.json"), prefix: "invoice", outputDir: OUTPUT_DIR },
-  { apiKey: "pm-api", schemaFile: join(OPENAPI_DIR, "pm-api-schema.json"), prefix: "pm", outputDir: OUTPUT_DIR },
-  { apiKey: "sm-api", schemaFile: join(OPENAPI_DIR, "sm-api-schema.json"), prefix: "sm", outputDir: OUTPUT_DIR },
-  { apiKey: "sign-api", schemaFile: join(OPENAPI_DIR, "sign-api-schema.json"), prefix: "sign", outputDir: SIGN_OUTPUT_DIR },
   { apiKey: "inventory-api", schemaFile: join(OPENAPI_DIR, "inventory-api-schema.json"), prefix: "inventory", outputDir: INVENTORY_OUTPUT_DIR },
 ];
 
@@ -714,7 +706,7 @@ async function main(): Promise<void> {
     console.log("");
     console.log("========================================");
     console.log("Reference generation complete!");
-    console.log(`Output directory: ${OUTPUT_DIR}`);
+    console.log(`Output directory: ${INVENTORY_OUTPUT_DIR}`);
   } catch (error) {
     console.error("Error:", error);
     process.exit(1);
