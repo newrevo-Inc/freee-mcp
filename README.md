@@ -1,6 +1,6 @@
 # freee-mcp
 
-freee会計、人事労務、請求書、工数管理、販売、サイン（電子契約）を AI Agent から操作できるようにする freee 公式の MCP サーバーと Agent Skills です。
+freee会計、人事労務、請求書、工数管理、販売を AI Agent から操作できるようにする freee 公式の MCP サーバーと Agent Skills です。
 
 - MCP サーバー: freee API の呼び出し・認証・リクエスト検証を担当
 - Agent Skills: API リファレンスと操作レシピを AI Agent のコンテキストに注入し、正確な API 利用をガイド
@@ -10,7 +10,6 @@ freee会計、人事労務、請求書、工数管理、販売、サイン（電
 ## 特徴
 
 - 複数 API 対応: 会計・人事労務・請求書・工数管理・販売の5つの freee API をサポート
-- サイン（電子契約）対応: freee サインの文書管理 API を専用コマンド（`freee-sign-mcp`）でサポート
 - OAuth 2.0 + PKCE: セキュアな認証フロー、トークン自動更新
 - 複数事業所対応: 事業所の動的切り替えが可能
 
@@ -160,7 +159,6 @@ Claude Code のプロンプト内からも実行できます:
 | 請求書   | 請求書、見積書、納品書                           | 4          |
 | 工数管理 | プロジェクト、チーム、パートナー、工数、ユーザーなど | 7          |
 | 販売     | 案件、受注、マスタ                               | 7          |
-| サイン   | 文書、フォルダ、テンプレート、マイ印鑑など       | 8          |
 | 在庫管理 | 商品マスター、拠点、入出荷、在庫、仕入先、出荷先など | 10         |
 
 AI Agent との会話中に freee API の操作を依頼すると、これらのリファレンスやレシピを参照して正確に実行します。
@@ -207,54 +205,6 @@ HTTPメソッドごとのシンプルなツール構成:
 | `freee_api_list_paths` | エンドポイント一覧 | -                  |
 
 パスは OpenAPI スキーマに対して自動検証されます。
-
-## freee サイン（電子契約）
-
-freee サインの API は専用コマンド `freee-sign-mcp` で利用できます。
-
-> Remote MCP での提供は現在準備中です。ローカルでの MCP サーバー起動のみサポートしています。
-
-### セットアップ
-
-```bash
-npx --package=freee-mcp -- freee-sign-mcp configure
-```
-
-対話式ウィザードが認証情報の設定と OAuth 認証を行います。
-
-### MCP 設定
-
-```json
-{
-  "mcpServers": {
-    "freee-sign-mcp": {
-      "command": "npx",
-      "args": ["--package=freee-mcp", "--", "freee-sign-mcp"]
-    }
-  }
-}
-```
-
-### サイン用ツール
-
-| ツール | 説明 |
-| --- | --- |
-| `sign_authenticate` | OAuth 認証を実行 |
-| `sign_auth_status` | 認証状態を確認 |
-| `sign_clear_auth` | 認証情報をクリア |
-| `sign_api_get` | データ取得 |
-| `sign_api_post` | 新規作成 |
-| `sign_api_put` | 更新 |
-| `sign_api_patch` | 部分更新 |
-| `sign_api_delete` | 削除 |
-
-### company_id の取り扱い
-
-リクエスト（パラメータまたはボディ）に `company_id` を含める場合、現在の事業所と一致している必要があります。不一致の場合はエラーになります。
-
-- 事業所の確認: `freee_get_current_company`
-- 事業所の切り替え: `freee_set_current_company`
-- company_id を含まない API（例: `/api/1/companies`）はそのまま実行可能
 
 ## freee 在庫管理
 

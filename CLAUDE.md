@@ -26,7 +26,6 @@ MCP server that exposes freee API endpoints as MCP tools:
   - `invoice-api-schema.json` - 請求書API (https://api.freee.co.jp/iv)
   - `pm-api-schema.json` - 工数管理API (https://api.freee.co.jp/pm)
   - `sm-api-schema.json` - 販売API (https://api.freee.co.jp/sm)
-  - `sign-api-schema.json` - サイン（電子契約）API (https://ninja-sign.com)
   - `inventory-api-schema.json` - ロジクラ（freee 在庫管理）API (https://api.logikura.com)
 - Schema Loader: `src/openapi/schema-loader.ts` loads and manages all API schemas
 - Tool Generation: `generateClientModeTool()` in `src/openapi/client-mode.ts` creates method-specific tools
@@ -47,8 +46,6 @@ Run `freee-mcp configure` to set up configuration interactively:
 
 - `freee-mcp` - Start MCP server
 - `freee-mcp configure` - Interactive configuration setup
-- `freee-sign-mcp` - Start Sign MCP server
-- `freee-sign-mcp configure` - Sign interactive configuration setup
 - `freee-inventory-mcp` - Start Inventory (Logikura) MCP server
 - `freee-inventory-mcp configure` - Inventory interactive configuration setup
 
@@ -71,8 +68,6 @@ Configuration is automatically loaded from `~/.config/freee-mcp/config.json`.
 
 Development mode: Use `"command": "bun", "args": ["run", "src/index.ts"]` with `"cwd": "/path/to/freee-mcp"`
 
-Sign development mode: Use `"command": "bun", "args": ["run", "src/sign/index.ts"]` with `"cwd": "/path/to/freee-mcp"`
-
 ### API Base URL の上書き（開発用）
 
 環境変数 `FREEE_API_BASE_URL_{SERVICE}` でAPIの向き先を変更できる（`src/openapi/schema-loader.ts` の `resolveBaseUrl` で処理）。
@@ -83,7 +78,6 @@ Sign development mode: Use `"command": "bun", "args": ["run", "src/sign/index.ts
 - `FREEE_API_BASE_URL_INVOICE` - 請求書API
 - `FREEE_API_BASE_URL_PM` - 工数管理API
 - `FREEE_API_BASE_URL_SM` - 販売API
-- `FREEE_SIGN_API_URL` - サインAPI（`src/sign/config.ts` で処理）
 - `FREEE_INVENTORY_API_URL` - ロジクラ API
 - `FREEE_INVENTORY_OAUTH_HOST` - ロジクラ OAuth ホスト（`src/inventory/config.ts` で処理）
 
