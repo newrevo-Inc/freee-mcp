@@ -44,7 +44,7 @@ describe('getUserAgent', () => {
 
   it('always starts with the freee-mcp product token', () => {
     // Other tests across the codebase rely on this prefix via /^freee-mcp\// —
-    // if we ever break it the matrix of api-client / sign / auth tests would
+    // if we ever break it the matrix of api-client / auth tests would
     // all fail, so assert it directly here as a single cheap regression guard.
     expect(getUserAgent()).toMatch(/^freee-mcp\//);
     initUserAgentTransportMode('remote');

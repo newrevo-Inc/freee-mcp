@@ -24,7 +24,7 @@ let currentMode: TransportMode = 'stdio';
  * codebase:
  *
  * - `src/server/http-server.ts` for the remote entry (must set `'remote'`)
- * - `src/index.ts` and `src/sign/index.ts` for stdio entries (can be omitted
+ * - `src/index.ts` for stdio entries (can be omitted
  *   because `'stdio'` is the module default, but calling it explicitly makes
  *   the transport mode self-documenting at the entry point)
  *

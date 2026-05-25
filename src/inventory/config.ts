@@ -3,7 +3,7 @@ import path from 'node:path';
 import { z } from 'zod';
 import { CONFIG_FILE_PERMISSION, getConfigDir } from '../constants.js';
 
-// freee=54321, sign=54322 との競合を避けるため 54323
+// freee=54321 との競合を避けるため 54323
 export const INVENTORY_DEFAULT_CALLBACK_PORT = 54323;
 
 // API ホストと OAuth ホストが別ドメインなので環境変数も 2 本

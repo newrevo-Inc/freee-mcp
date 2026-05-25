@@ -123,7 +123,7 @@ export type CanonicalCloseReason = 'completed' | 'client_disconnect';
  * - Top-level scalars: identity (`request_id`, IP, agent, user, session).
  * - `http`: inbound MCP request properties (status, duration, path).
  * - `mcp`: MCP-protocol layer events (tool calls, counts).
- * - `api`: outbound freee/freee-sign HTTP calls (calls + count).
+ * - `api`: outbound freee HTTP calls (calls + count).
  * - `errors`: serialized error chains.
  *
  * Trace-related fields (`trace_id`, `span_id`, `trace_sampled`) are
