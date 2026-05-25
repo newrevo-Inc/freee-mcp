@@ -578,9 +578,7 @@ function extractAllTags(schema: OpenAPISchema): string[] {
 }
 
 // リファレンス生成対象外のタグ（認証フロー等、ユーザーが直接操作しないエンドポイント）
-const TAG_BLACKLIST: Record<string, string[]> = {
-  "sign-api": ["OAuth 2.0"],
-};
+const TAG_BLACKLIST: Record<string, string[]> = {};
 
 /**
  * Sync tag mappings: add any tags found in schemas but missing from mappings.
